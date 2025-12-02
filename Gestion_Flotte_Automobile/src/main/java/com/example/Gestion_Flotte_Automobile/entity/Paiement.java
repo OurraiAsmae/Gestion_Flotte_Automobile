@@ -26,6 +26,11 @@ public class Paiement {
     @NotNull(message = "La voiture est obligatoire")
     private Voiture voiture;
 
+    @ManyToOne
+    @JoinColumn(name = "client_id", nullable = false)
+    @NotNull(message = "Le client est obligatoire")
+    private Client client;
+
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private TypePaiement typePaiement;

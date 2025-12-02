@@ -30,6 +30,11 @@ public class Reservation {
     @NotNull(message = "L'employé est obligatoire")
     private User employe;
 
+    @ManyToOne
+    @JoinColumn(name = "client_id", nullable = false)
+    @NotNull(message = "Le client est obligatoire")
+    private Client client;
+
     @NotNull(message = "La date de début est obligatoire")
     @Column(nullable = false)
     private LocalDateTime dateDebut;
