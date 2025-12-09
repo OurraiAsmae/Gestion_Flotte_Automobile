@@ -40,11 +40,11 @@ public class PaiementServiceImpl implements PaiementService {
     @Override
     @Transactional
     public Paiement update(Long id, Paiement paiement) {
-        if (paiementRepository.existsById(id)) {
-            paiement.setId(id);
-            return paiementRepository.save(paiement);
-        }
-        return null;
+        return paiementRepository.findById(id).map(existingPaiement -> {
+            // Only allow updating the status
+            existingPaiement.setStatut(paiement.getStatut());
+            return paiementRepository.save(existingPaiement);
+        }).orElse(null);
     }
 
     @Override

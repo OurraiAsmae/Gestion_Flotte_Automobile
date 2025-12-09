@@ -1,13 +1,8 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-    layout:decorate="~{layout/layout}">
+<html th:replace="layout/layout :: layout(~{::content})">
 
-<head>
-    <title>Tableau de bord Employé</title>
-</head>
-
-<body>
-    <div layout:fragment="content">
+<body th:remove="tag">
+    <div th:fragment="content">
         <div class="container mt-4">
             <div
                 class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-4 border-bottom">

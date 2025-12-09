@@ -1,27 +1,29 @@
 <!DOCTYPE html>
-<html th:replace="layout/layout :: layout(~{::body})">
+<html th:replace="layout/layout :: layout(~{::content})">
 
 <body th:remove="tag">
-    <div class="d-flex justify-content-between align-items-center mb-3">
-        <h2>Notifications</h2>
-    </div>
-
-    <div class="list-group">
-        <div th:each="notification : ${notifications}" class="list-group-item list-group-item-action"
-            th:classappend="${!notification.lu} ? 'active' : ''">
-            <div class="d-flex w-100 justify-content-between">
-                <h5 class="mb-1" th:text="${notification.titre}"></h5>
-                <small th:text="${notification.dateEnvoi}"></small>
-            </div>
-            <p class="mb-1" th:text="${notification.message}"></p>
-            <div class="d-flex justify-content-between align-items-center">
-                <small th:text="${notification.typeNotification}"></small>
-                <a th:if="${!notification.lu}" th:href="@{/notifications/read/{id}(id=${notification.id})}"
-                    class="btn btn-sm btn-light text-dark">Marquer comme lu</a>
-            </div>
+    <div th:fragment="content">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h2>Notifications</h2>
         </div>
-        <div th:if="${#lists.isEmpty(notifications)}" class="alert alert-info">
-            Aucune notification.
+
+        <div class="list-group">
+            <div th:each="notification : ${notifications}" class="list-group-item list-group-item-action"
+                th:classappend="${!notification.lu} ? 'active' : ''">
+                <div class="d-flex w-100 justify-content-between">
+                    <h5 class="mb-1" th:text="${notification.titre}"></h5>
+                    <small th:text="${notification.dateEnvoi}"></small>
+                </div>
+                <p class="mb-1" th:text="${notification.message}"></p>
+                <div class="d-flex justify-content-between align-items-center">
+                    <small th:text="${notification.typeNotification}"></small>
+                    <a th:if="${!notification.lu}" th:href="@{/notifications/read/{id}(id=${notification.id})}"
+                        class="btn btn-sm btn-light text-dark">Marquer comme lu</a>
+                </div>
+            </div>
+            <div th:if="${#lists.isEmpty(notifications)}" class="alert alert-info">
+                Aucune notification.
+            </div>
         </div>
     </div>
 </body>

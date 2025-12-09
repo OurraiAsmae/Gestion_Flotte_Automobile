@@ -44,6 +44,38 @@ public class EntretienController {
         }
     }
 
+    @GetMapping("/edit/{id}")
+    public String showEditForm(@PathVariable Long id, Model model) {
+        java.util.Optional<Entretien> entretien = entretienService.findById(id);
+        if (entretien.isPresent()) {
+            model.addAttribute("entretien", entretien.get());
+            model.addAttribute("voitures", voitureService.findAll());
+            model.addAttribute("types", TypeEntretien.values());
+            return "entretiens/form";
+        }
+        return "redirect:/entretiens";
+    }
+
+    @PostMapping("/update/{id}")
+    public String updateEntretien(@PathVariable Long id, @ModelAttribute("entretien") Entretien entretien,
+            Model model) {
+        try {
+            entretienService.update(id, entretien);
+            return "redirect:/entretiens";
+        } catch (Exception e) {
+            model.addAttribute("error", "Erreur lors de la modification : " + e.getMessage());
+            model.addAttribute("voitures", voitureService.findAll());
+            model.addAttribute("types", TypeEntretien.values());
+            return "entretiens/form";
+        }
+    }
+
+    @GetMapping("/delete/{id}")
+    public String deleteEntretien(@PathVariable Long id) {
+        entretienService.deleteById(id);
+        return "redirect:/entretiens";
+    }
+
     @GetMapping("/voiture/{id}")
     public String listEntretiensByVoiture(@PathVariable Long id, Model model) {
         model.addAttribute("entretiens", entretienService.findByVoiture(id));

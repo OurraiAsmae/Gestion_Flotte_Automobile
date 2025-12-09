@@ -1,59 +1,61 @@
 <!DOCTYPE html>
-<html th:replace="layout/layout :: layout(~{::body})">
+<html th:replace="layout/layout :: layout(~{::content})">
 
 <body th:remove="tag">
-    <div class="card">
-        <div class="card-header d-flex justify-content-between align-items-center">
-            <h3>Détails de la réservation</h3>
-            <a th:href="@{/reservations}" class="btn btn-secondary">Retour</a>
-        </div>
-        <div class="card-body">
-            <div class="row">
-                <div class="col-md-6">
-                    <h4>Informations Réservation</h4>
-                    <dl class="row">
-                        <dt class="col-sm-4">ID</dt>
-                        <dd class="col-sm-8" th:text="${reservation.id}"></dd>
+    <div th:fragment="content">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h3>Détails de la réservation</h3>
+                <a th:href="@{/reservations}" class="btn btn-secondary">Retour</a>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <h4>Informations Réservation</h4>
+                        <dl class="row">
+                            <dt class="col-sm-4">ID</dt>
+                            <dd class="col-sm-8" th:text="${reservation.id}"></dd>
 
-                        <dt class="col-sm-4">Date Début</dt>
-                        <dd class="col-sm-8" th:text="${reservation.dateDebut}"></dd>
+                            <dt class="col-sm-4">Date Début</dt>
+                            <dd class="col-sm-8" th:text="${reservation.dateDebut}"></dd>
 
-                        <dt class="col-sm-4">Date Fin</dt>
-                        <dd class="col-sm-8" th:text="${reservation.dateFin}"></dd>
+                            <dt class="col-sm-4">Date Fin</dt>
+                            <dd class="col-sm-8" th:text="${reservation.dateFin}"></dd>
 
-                        <dt class="col-sm-4">Statut</dt>
-                        <dd class="col-sm-8"><span class="badge bg-info" th:text="${reservation.statut}"></span>
-                        </dd>
+                            <dt class="col-sm-4">Statut</dt>
+                            <dd class="col-sm-8"><span class="badge bg-info" th:text="${reservation.statut}"></span>
+                            </dd>
 
-                        <dt class="col-sm-4">Motif</dt>
-                        <dd class="col-sm-8" th:text="${reservation.motif}"></dd>
-                    </dl>
-                </div>
-                <div class="col-md-6">
-                    <h4>Client & Voiture</h4>
-                    <dl class="row">
-                        <dt class="col-sm-4">Client</dt>
-                        <dd class="col-sm-8">
-                            <a th:href="@{/clients/edit/{id}(id=${reservation.client.id})}"
-                                th:text="${reservation.client.prenom + ' ' + reservation.client.nom}"></a>
-                        </dd>
+                            <dt class="col-sm-4">Motif</dt>
+                            <dd class="col-sm-8" th:text="${reservation.motif}"></dd>
+                        </dl>
+                    </div>
+                    <div class="col-md-6">
+                        <h4>Client & Voiture</h4>
+                        <dl class="row">
+                            <dt class="col-sm-4">Client</dt>
+                            <dd class="col-sm-8">
+                                <a th:href="@{/clients/edit/{id}(id=${reservation.client.id})}"
+                                    th:text="${reservation.client.prenom + ' ' + reservation.client.nom}"></a>
+                            </dd>
 
-                        <dt class="col-sm-4">Voiture</dt>
-                        <dd class="col-sm-8">
-                            <a th:href="@{/voitures/{id}(id=${reservation.voiture.id})}"
-                                th:text="${reservation.voiture.marque + ' ' + reservation.voiture.modele}"></a>
-                        </dd>
+                            <dt class="col-sm-4">Voiture</dt>
+                            <dd class="col-sm-8">
+                                <a th:href="@{/voitures/{id}(id=${reservation.voiture.id})}"
+                                    th:text="${reservation.voiture.marque + ' ' + reservation.voiture.modele}"></a>
+                            </dd>
 
-                        <dt class="col-sm-4">Employé</dt>
-                        <dd class="col-sm-8"
-                            th:text="${reservation.employe != null ? reservation.employe.prenom + ' ' + reservation.employe.nom : 'N/A'}">
-                        </dd>
-                    </dl>
+                            <dt class="col-sm-4">Employé</dt>
+                            <dd class="col-sm-8"
+                                th:text="${reservation.employe != null ? reservation.employe.prenom + ' ' + reservation.employe.nom : 'N/A'}">
+                            </dd>
+                        </dl>
+                    </div>
                 </div>
             </div>
-        </div>
-        <div class="card-footer">
-            <a th:href="@{/reservations/edit/{id}(id=${reservation.id})}" class="btn btn-warning">Modifier</a>
+            <div class="card-footer">
+                <a th:href="@{/reservations/edit/{id}(id=${reservation.id})}" class="btn btn-warning">Modifier</a>
+            </div>
         </div>
     </div>
 </body>

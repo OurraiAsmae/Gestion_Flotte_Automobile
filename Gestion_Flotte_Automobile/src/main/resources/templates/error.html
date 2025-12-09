@@ -1,22 +1,24 @@
 <!DOCTYPE html>
-<html th:replace="layout/layout :: layout(~{::body})">
+<html th:replace="~{layout/layout :: layout(~{::content})}">
 
 <body th:remove="tag">
-    <div class="container mt-5 text-center">
-        <h1 class="display-1 text-danger">Oups !</h1>
-        <h2 class="mb-4">Une erreur est survenue.</h2>
-        <p class="lead">Nous ne parvenons pas à trouver la page que vous recherchez ou une erreur interne s'est
-            produite.</p>
-        <a href="/" class="btn btn-primary mt-3">Retour à l'accueil</a>
+    <div th:fragment="content">
+        <div class="container mt-5 text-center">
+            <h1 class="display-1 text-danger">Oups !</h1>
+            <h2 class="mb-4">Une erreur est survenue.</h2>
+            <p class="lead">Nous ne parvenons pas à trouver la page que vous recherchez ou une erreur interne s'est
+                produite.</p>
+            <a href="/" class="btn btn-primary mt-3">Retour à l'accueil</a>
 
-        <div class="mt-5" th:if="${status}">
-            <p>Code d'erreur : <span th:text="${status}"></span></p>
-        </div>
-        <div th:if="${error}">
-            <p>Erreur : <span th:text="${error}"></span></p>
-        </div>
-        <div th:if="${message}">
-            <p>Message : <span th:text="${message}"></span></p>
+            <div class="mt-5" th:if="${status}">
+                <p>Code d'erreur : <span th:text="${status}"></span></p>
+            </div>
+            <div th:if="${error}">
+                <p>Erreur : <span th:text="${error}"></span></p>
+            </div>
+            <div th:if="${message}">
+                <p>Message : <span th:text="${message}"></span></p>
+            </div>
         </div>
     </div>
 </body>

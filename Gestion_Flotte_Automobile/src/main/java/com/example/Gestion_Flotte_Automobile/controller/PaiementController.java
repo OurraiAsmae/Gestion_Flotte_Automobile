@@ -51,6 +51,41 @@ public class PaiementController {
         }
     }
 
+    @GetMapping("/edit/{id}")
+    public String showEditForm(@PathVariable Long id, Model model) {
+        java.util.Optional<Paiement> paiement = paiementService.findById(id);
+        if (paiement.isPresent()) {
+            model.addAttribute("paiement", paiement.get());
+            model.addAttribute("clients", clientService.findAll());
+            model.addAttribute("voitures", voitureService.findAll());
+            model.addAttribute("types", TypePaiement.values());
+            model.addAttribute("statuts", StatutPaiement.values());
+            return "paiements/form";
+        }
+        return "redirect:/paiements";
+    }
+
+    @PostMapping("/update/{id}")
+    public String updatePaiement(@PathVariable Long id, @ModelAttribute("paiement") Paiement paiement, Model model) {
+        try {
+            paiementService.update(id, paiement);
+            return "redirect:/paiements";
+        } catch (Exception e) {
+            model.addAttribute("error", "Erreur lors de la modification : " + e.getMessage());
+            model.addAttribute("clients", clientService.findAll());
+            model.addAttribute("voitures", voitureService.findAll());
+            model.addAttribute("types", TypePaiement.values());
+            model.addAttribute("statuts", StatutPaiement.values());
+            return "paiements/form";
+        }
+    }
+
+    @GetMapping("/delete/{id}")
+    public String deletePaiement(@PathVariable Long id) {
+        paiementService.deleteById(id);
+        return "redirect:/paiements";
+    }
+
     @GetMapping("/client/{id}")
     public String listPaiementsByClient(@PathVariable Long id, Model model) {
         model.addAttribute("paiements", paiementService.findByClient(id));

@@ -4,6 +4,7 @@ import com.example.Gestion_Flotte_Automobile.entity.User;
 import com.example.Gestion_Flotte_Automobile.enums.Role;
 import com.example.Gestion_Flotte_Automobile.repository.UserRepository;
 import com.example.Gestion_Flotte_Automobile.service.UserService;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -14,25 +15,32 @@ import java.util.Optional;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
-    public UserServiceImpl(UserRepository userRepository) {
+    public UserServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
     @Transactional
     public User save(User user) {
+        user.setMotDePasse(passwordEncoder.encode(user.getMotDePasse()));
         return userRepository.save(user);
     }
 
     @Override
     @Transactional
     public User update(Long id, User user) {
-        if (userRepository.existsById(id)) {
+        return userRepository.findById(id).map(existingUser -> {
             user.setId(id);
+            if (user.getMotDePasse() != null && !user.getMotDePasse().isEmpty()) {
+                user.setMotDePasse(passwordEncoder.encode(user.getMotDePasse()));
+            } else {
+                user.setMotDePasse(existingUser.getMotDePasse());
+            }
             return userRepository.save(user);
-        }
-        return null;
+        }).orElse(null);
     }
 
     @Override

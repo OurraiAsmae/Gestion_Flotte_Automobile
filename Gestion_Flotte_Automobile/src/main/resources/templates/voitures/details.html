@@ -1,61 +1,63 @@
 <!DOCTYPE html>
-<html th:replace="layout/layout :: layout(~{::body})">
+<html th:replace="layout/layout :: layout(~{::content})">
 
 <body th:remove="tag">
-    <div class="card mb-4">
-        <div class="card-header d-flex justify-content-between align-items-center">
-            <h3>Détails de la voiture</h3>
-            <a th:href="@{/voitures}" class="btn btn-secondary">Retour</a>
-        </div>
-        <div class="card-body">
-            <div class="row">
-                <div class="col-md-6">
-                    <dl class="row">
-                        <dt class="col-sm-4">Immatriculation</dt>
-                        <dd class="col-sm-8" th:text="${voiture.immatriculation}"></dd>
+    <div th:fragment="content">
+        <div class="card mb-4">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h3>Détails de la voiture</h3>
+                <a th:href="@{/voitures}" class="btn btn-secondary">Retour</a>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <dl class="row">
+                            <dt class="col-sm-4">Immatriculation</dt>
+                            <dd class="col-sm-8" th:text="${voiture.immatriculation}"></dd>
 
-                        <dt class="col-sm-4">Marque</dt>
-                        <dd class="col-sm-8" th:text="${voiture.marque}"></dd>
+                            <dt class="col-sm-4">Marque</dt>
+                            <dd class="col-sm-8" th:text="${voiture.marque}"></dd>
 
-                        <dt class="col-sm-4">Modèle</dt>
-                        <dd class="col-sm-8" th:text="${voiture.modele}"></dd>
+                            <dt class="col-sm-4">Modèle</dt>
+                            <dd class="col-sm-8" th:text="${voiture.modele}"></dd>
 
-                        <dt class="col-sm-4">Année</dt>
-                        <dd class="col-sm-8" th:text="${voiture.annee}"></dd>
-                    </dl>
-                </div>
-                <div class="col-md-6">
-                    <dl class="row">
-                        <dt class="col-sm-4">Statut</dt>
-                        <dd class="col-sm-8"><span class="badge bg-info" th:text="${voiture.statut}"></span></dd>
+                            <dt class="col-sm-4">Année</dt>
+                            <dd class="col-sm-8" th:text="${voiture.annee}"></dd>
+                        </dl>
+                    </div>
+                    <div class="col-md-6">
+                        <dl class="row">
+                            <dt class="col-sm-4">Statut</dt>
+                            <dd class="col-sm-8"><span class="badge bg-info" th:text="${voiture.statut}"></span></dd>
 
-                        <dt class="col-sm-4">Kilométrage</dt>
-                        <dd class="col-sm-8" th:text="${voiture.kilometrageActuel} + ' km'"></dd>
+                            <dt class="col-sm-4">Kilométrage</dt>
+                            <dd class="col-sm-8" th:text="${voiture.kilometrageActuel} + ' km'"></dd>
 
-                        <dt class="col-sm-4">Assurance Exp.</dt>
-                        <dd class="col-sm-8" th:text="${voiture.dateExpirationAssurance}"></dd>
-                    </dl>
+                            <dt class="col-sm-4">Assurance Exp.</dt>
+                            <dd class="col-sm-8" th:text="${voiture.dateExpirationAssurance}"></dd>
+                        </dl>
+                    </div>
                 </div>
             </div>
+            <div class="card-footer">
+                <a th:href="@{/voitures/edit/{id}(id=${voiture.id})}" class="btn btn-warning">Modifier</a>
+            </div>
         </div>
-        <div class="card-footer">
-            <a th:href="@{/voitures/edit/{id}(id=${voiture.id})}" class="btn btn-warning">Modifier</a>
-        </div>
-    </div>
 
-    <!-- Sections for related data can be added here (Entretiens, Reservations, etc.) -->
-    <div class="row">
-        <div class="col-md-12">
-            <div class="card">
-                <div class="card-header">
-                    <h4>Historique</h4>
-                </div>
-                <div class="card-body">
-                    <p><em>Fonctionnalité à implémenter : afficher ici les réservations et entretiens liés.</em></p>
-                    <a th:href="@{/entretiens/voiture/{id}(id=${voiture.id})}" class="btn btn-outline-info">Voir les
-                        entretiens</a>
-                    <a th:href="@{/paiements/voiture/{id}(id=${voiture.id})}" class="btn btn-outline-success">Voir
-                        les paiements</a>
+        <!-- Sections for related data can be added here (Entretiens, Reservations, etc.) -->
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h4>Historique</h4>
+                    </div>
+                    <div class="card-body">
+                        <p><em>Fonctionnalité à implémenter : afficher ici les réservations et entretiens liés.</em></p>
+                        <a th:href="@{/entretiens/voiture/{id}(id=${voiture.id})}" class="btn btn-outline-info">Voir les
+                            entretiens</a>
+                        <a th:href="@{/paiements/voiture/{id}(id=${voiture.id})}" class="btn btn-outline-success">Voir
+                            les paiements</a>
+                    </div>
                 </div>
             </div>
         </div>

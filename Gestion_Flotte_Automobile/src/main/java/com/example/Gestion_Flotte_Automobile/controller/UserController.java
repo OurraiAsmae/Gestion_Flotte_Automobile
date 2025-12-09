@@ -33,8 +33,22 @@ public class UserController {
     }
 
     @PostMapping
-    public String saveUser(@ModelAttribute("user") User user) {
-        userService.save(user);
+    public String saveUser(@jakarta.validation.Valid @ModelAttribute("user") User user,
+            org.springframework.validation.BindingResult result, Model model) {
+        if (result.hasErrors()) {
+            model.addAttribute("roles", Role.values());
+            model.addAttribute("statuts", StatutUtilisateur.values());
+            return "users/form";
+        }
+        try {
+            userService.save(user);
+        } catch (Exception e) {
+            model.addAttribute("error",
+                    "Une erreur est survenue lors de l'enregistrement de l'utilisateur : " + e.getMessage());
+            model.addAttribute("roles", Role.values());
+            model.addAttribute("statuts", StatutUtilisateur.values());
+            return "users/form";
+        }
         return "redirect:/users";
     }
 
@@ -51,8 +65,21 @@ public class UserController {
     }
 
     @PostMapping("/update/{id}")
-    public String updateUser(@PathVariable Long id, @ModelAttribute("user") User user) {
-        userService.update(id, user);
+    public String updateUser(@PathVariable Long id, @jakarta.validation.Valid @ModelAttribute("user") User user,
+            org.springframework.validation.BindingResult result, Model model) {
+        if (result.hasErrors()) {
+            model.addAttribute("roles", Role.values());
+            model.addAttribute("statuts", StatutUtilisateur.values());
+            return "users/form";
+        }
+        try {
+            userService.update(id, user);
+        } catch (Exception e) {
+            model.addAttribute("error", "Une erreur est survenue lors de la modification : " + e.getMessage());
+            model.addAttribute("roles", Role.values());
+            model.addAttribute("statuts", StatutUtilisateur.values());
+            return "users/form";
+        }
         return "redirect:/users";
     }
 

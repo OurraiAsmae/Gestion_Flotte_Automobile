@@ -1,52 +1,55 @@
 <!DOCTYPE html>
-<html th:replace="layout/layout :: layout(~{::body})">
+<html th:replace="~{layout/layout :: layout(~{::content})}">
 
 <body th:remove="tag">
-    <div class="d-flex justify-content-between align-items-center mb-3">
-        <h2>Gestion des Utilisateurs</h2>
-        <a th:href="@{/users/new}" class="btn btn-primary"><i class="bi bi-person-plus"></i> Ajouter un
-            utilisateur</a>
-    </div>
+    <div th:fragment="content">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h2>Gestion des Utilisateurs</h2>
+            <a th:href="@{/users/new}" class="btn btn-primary"><i class="bi bi-person-plus"></i> Ajouter un
+                utilisateur</a>
+        </div>
 
-    <table class="table table-striped table-hover">
-        <thead class="table-dark">
-            <tr>
-                <th>ID</th>
-                <th>Nom</th>
-                <th>Prénom</th>
-                <th>Email</th>
-                <th>Rôle</th>
-                <th>Statut</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr th:each="user : ${users}">
-                <td th:text="${user.id}"></td>
-                <td th:text="${user.nom}"></td>
-                <td th:text="${user.prenom}"></td>
-                <td th:text="${user.email}"></td>
-                <td>
-                    <span th:text="${user.role}" class="badge"
-                        th:classappend="${user.role.name() == 'GERANT' ? 'bg-danger' : 'bg-primary'}">
-                    </span>
-                </td>
-                <td>
-                    <span th:text="${user.statut}" class="badge"
-                        th:classappend="${user.statut.name() == 'ACTIF' ? 'bg-success' : 'bg-secondary'}">
-                    </span>
-                </td>
-                <td>
-                    <a th:href="@{/users/{id}(id=${user.id})}" class="btn btn-sm btn-info" title="Détails"><i
-                            class="bi bi-eye"></i></a>
-                    <a th:href="@{/users/edit/{id}(id=${user.id})}" class="btn btn-sm btn-warning" title="Modifier"><i
-                            class="bi bi-pencil"></i></a>
-                    <a th:href="@{/users/delete/{id}(id=${user.id})}" class="btn btn-sm btn-danger"
-                        onclick="return confirm('Êtes-vous sûr ?')" title="Supprimer"><i class="bi bi-trash"></i></a>
-                </td>
-            </tr>
-        </tbody>
-    </table>
+        <table class="table table-striped table-hover">
+            <thead class="table-dark">
+                <tr>
+                    <th>ID</th>
+                    <th>Nom</th>
+                    <th>Prénom</th>
+                    <th>Email</th>
+                    <th>Rôle</th>
+                    <th>Statut</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="user : ${users}">
+                    <td th:text="${user.id}"></td>
+                    <td th:text="${user.nom}"></td>
+                    <td th:text="${user.prenom}"></td>
+                    <td th:text="${user.email}"></td>
+                    <td>
+                        <span th:text="${user.role}" class="badge"
+                            th:classappend="${user.role.name() == 'GERANT' ? 'bg-danger' : 'bg-primary'}">
+                        </span>
+                    </td>
+                    <td>
+                        <span th:text="${user.statut}" class="badge"
+                            th:classappend="${user.statut.name() == 'ACTIF' ? 'bg-success' : 'bg-secondary'}">
+                        </span>
+                    </td>
+                    <td>
+                        <a th:href="@{/users/{id}(id=${user.id})}" class="btn btn-sm btn-info" title="Détails"><i
+                                class="bi bi-eye"></i></a>
+                        <a th:href="@{/users/edit/{id}(id=${user.id})}" class="btn btn-sm btn-warning"
+                            title="Modifier"><i class="bi bi-pencil"></i></a>
+                        <a th:href="@{/users/delete/{id}(id=${user.id})}" class="btn btn-sm btn-danger"
+                            onclick="return confirm('Êtes-vous sûr ?')" title="Supprimer"><i
+                                class="bi bi-trash"></i></a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
 </body>
 
 </html>

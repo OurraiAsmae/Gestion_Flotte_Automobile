@@ -1,15 +1,17 @@
 <!DOCTYPE html>
-<html th:replace="layout/layout :: layout(~{::body})">
+<html th:replace="layout/layout :: layout(~{::content})">
 
 <body th:remove="tag">
-    <div class="d-flex align-items-center justify-content-center" style="height: 60vh;">
-        <div class="text-center">
-            <h1 class="display-1 fw-bold text-danger">403</h1>
-            <p class="fs-3"> <span class="text-danger">Oups!</span> Accès Refusé.</p>
-            <p class="lead">
-                Vous n'avez pas la permission d'accéder à cette page.
-            </p>
-            <a href="/" class="btn btn-primary">Retour à l'accueil</a>
+    <div th:fragment="content">
+        <div class="d-flex align-items-center justify-content-center" style="height: 60vh;">
+            <div class="text-center">
+                <h1 class="display-1 fw-bold text-danger">403</h1>
+                <p class="fs-3"> <span class="text-danger">Oups!</span> Accès Refusé.</p>
+                <p class="lead">
+                    Vous n'avez pas la permission d'accéder à cette page.
+                </p>
+                <a href="/" class="btn btn-primary">Retour à l'accueil</a>
+            </div>
         </div>
     </div>
 </body>
