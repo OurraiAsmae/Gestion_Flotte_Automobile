@@ -53,5 +53,6 @@ public class User {
 
     @OneToMany(mappedBy = "employe", cascade = CascadeType.ALL)
     @com.fasterxml.jackson.annotation.JsonIgnore
+    @lombok.ToString.Exclude
     private List<Reservation> reservations;
 }

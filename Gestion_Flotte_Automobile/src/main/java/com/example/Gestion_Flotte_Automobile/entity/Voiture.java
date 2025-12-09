@@ -57,13 +57,16 @@ public class Voiture {
 
     @OneToMany(mappedBy = "voiture", cascade = CascadeType.ALL)
     @com.fasterxml.jackson.annotation.JsonIgnore
+    @lombok.ToString.Exclude
     private List<Reservation> reservations;
 
     @OneToMany(mappedBy = "voiture", cascade = CascadeType.ALL)
     @com.fasterxml.jackson.annotation.JsonIgnore
+    @lombok.ToString.Exclude
     private List<Entretien> entretiens;
 
     @OneToMany(mappedBy = "voiture", cascade = CascadeType.ALL)
     @com.fasterxml.jackson.annotation.JsonIgnore
+    @lombok.ToString.Exclude
     private List<Paiement> paiements;
 }

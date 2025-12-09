@@ -15,13 +15,16 @@ public class EntretienServiceImpl implements EntretienService {
     private final EntretienRepository entretienRepository;
     private final com.example.Gestion_Flotte_Automobile.service.VoitureService voitureService;
     private final com.example.Gestion_Flotte_Automobile.service.NotificationService notificationService;
+    private final com.example.Gestion_Flotte_Automobile.service.UserService userService;
 
     public EntretienServiceImpl(EntretienRepository entretienRepository,
             com.example.Gestion_Flotte_Automobile.service.VoitureService voitureService,
-            com.example.Gestion_Flotte_Automobile.service.NotificationService notificationService) {
+            com.example.Gestion_Flotte_Automobile.service.NotificationService notificationService,
+            com.example.Gestion_Flotte_Automobile.service.UserService userService) {
         this.entretienRepository = entretienRepository;
         this.voitureService = voitureService;
         this.notificationService = notificationService;
+        this.userService = userService;
     }
 
     @Override
@@ -42,6 +45,16 @@ public class EntretienServiceImpl implements EntretienService {
         voitureService.mettreAJourStatutVoiture(voiture,
                 com.example.Gestion_Flotte_Automobile.enums.StatutVoiture.EN_ENTRETIEN);
 
+        // Notify Managers
+        java.util.List<com.example.Gestion_Flotte_Automobile.entity.User> managers = userService
+                .findByRole(com.example.Gestion_Flotte_Automobile.enums.Role.GERANT);
+        for (com.example.Gestion_Flotte_Automobile.entity.User manager : managers) {
+            notificationService.envoyerNotification(manager,
+                    "Nouvel Entretien",
+                    "Un nouvel entretien a été planifié pour la voiture " + voiture.getImmatriculation()
+                            + ". Statut: EN_ENTRETIEN",
+                    com.example.Gestion_Flotte_Automobile.enums.TypeNotification.INFORMATION);
+        }
 
         return saved;
     }

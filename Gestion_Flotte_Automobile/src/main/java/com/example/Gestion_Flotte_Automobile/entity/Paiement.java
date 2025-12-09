@@ -27,6 +27,10 @@ public class Paiement {
     private Voiture voiture;
 
     @ManyToOne
+    @JoinColumn(name = "reservation_id")
+    private Reservation reservation;
+
+    @ManyToOne
     @JoinColumn(name = "client_id", nullable = false)
     @NotNull(message = "Le client est obligatoire")
     private Client client;

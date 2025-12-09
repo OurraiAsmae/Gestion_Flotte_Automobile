@@ -51,9 +51,11 @@ public class Client {
 
     @OneToMany(mappedBy = "client", cascade = CascadeType.ALL)
     @com.fasterxml.jackson.annotation.JsonIgnore
+    @lombok.ToString.Exclude
     private List<Reservation> reservations;
 
     @OneToMany(mappedBy = "client", cascade = CascadeType.ALL)
     @com.fasterxml.jackson.annotation.JsonIgnore
+    @lombok.ToString.Exclude
     private List<Paiement> paiements;
 }

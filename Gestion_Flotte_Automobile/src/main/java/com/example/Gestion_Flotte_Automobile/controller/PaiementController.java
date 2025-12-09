@@ -19,6 +19,7 @@ public class PaiementController {
     private final PaiementService paiementService;
     private final ClientService clientService;
     private final VoitureService voitureService;
+    private final com.example.Gestion_Flotte_Automobile.service.ReservationService reservationService;
 
     @GetMapping
     public String listPaiements(Model model) {
@@ -32,6 +33,7 @@ public class PaiementController {
         model.addAttribute("paiement", new Paiement());
         model.addAttribute("clients", clientService.findAll());
         model.addAttribute("voitures", voitureService.findAll());
+        model.addAttribute("reservations", reservationService.findAll());
         model.addAttribute("types", TypePaiement.values());
         model.addAttribute("statuts", StatutPaiement.values());
         return "paiements/form";
@@ -46,6 +48,7 @@ public class PaiementController {
             model.addAttribute("error", e.getMessage());
             model.addAttribute("clients", clientService.findAll());
             model.addAttribute("voitures", voitureService.findAll());
+            model.addAttribute("reservations", reservationService.findAll());
             model.addAttribute("types", TypePaiement.values());
             model.addAttribute("statuts", StatutPaiement.values());
             return "paiements/form";
@@ -59,6 +62,7 @@ public class PaiementController {
             model.addAttribute("paiement", paiement.get());
             model.addAttribute("clients", clientService.findAll());
             model.addAttribute("voitures", voitureService.findAll());
+            model.addAttribute("reservations", reservationService.findAll());
             model.addAttribute("types", TypePaiement.values());
             model.addAttribute("statuts", StatutPaiement.values());
             return "paiements/form";
@@ -75,6 +79,7 @@ public class PaiementController {
             model.addAttribute("error", "Erreur lors de la modification : " + e.getMessage());
             model.addAttribute("clients", clientService.findAll());
             model.addAttribute("voitures", voitureService.findAll());
+            model.addAttribute("reservations", reservationService.findAll());
             model.addAttribute("types", TypePaiement.values());
             model.addAttribute("statuts", StatutPaiement.values());
             return "paiements/form";

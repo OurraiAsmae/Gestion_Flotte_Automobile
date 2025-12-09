@@ -14,27 +14,47 @@ import java.util.Optional;
 public class PaiementServiceImpl implements PaiementService {
 
     private final PaiementRepository paiementRepository;
-    private final com.example.Gestion_Flotte_Automobile.repository.ReservationRepository reservationRepository;
+    private final com.example.Gestion_Flotte_Automobile.service.NotificationService notificationService;
 
     public PaiementServiceImpl(PaiementRepository paiementRepository,
-            com.example.Gestion_Flotte_Automobile.repository.ReservationRepository reservationRepository) {
+            com.example.Gestion_Flotte_Automobile.service.NotificationService notificationService) {
         this.paiementRepository = paiementRepository;
-        this.reservationRepository = reservationRepository;
+        this.notificationService = notificationService;
     }
 
     @Override
     @Transactional
     public Paiement save(Paiement paiement) {
 
+        if (paiement.getReservation() == null) {
+            throw new IllegalArgumentException("Le paiement doit être lié à une réservation existante.");
+        }
+
+        // Auto-fill client and car from reservation if not set or verify match
         if (paiement.getClient() == null) {
-            throw new IllegalArgumentException("Le paiement doit être associé à un client.");
+            paiement.setClient(paiement.getReservation().getClient());
         }
-        List<com.example.Gestion_Flotte_Automobile.entity.Reservation> reservations = reservationRepository
-                .findByClientId(paiement.getClient().getId());
-        if (reservations.isEmpty()) {
-            throw new IllegalStateException("Impossible d'enregistrer un paiement : ce client n'a aucune réservation.");
+        if (paiement.getVoiture() == null) {
+            paiement.setVoiture(paiement.getReservation().getVoiture());
         }
-        return paiementRepository.save(paiement);
+
+        if (!paiement.getReservation().getClient().getId().equals(paiement.getClient().getId())) {
+            throw new IllegalArgumentException("Le client du paiement ne correspond pas au client de la réservation.");
+        }
+
+        Paiement saved = paiementRepository.save(paiement);
+
+        // Notify the client? Or the employee who manages this?
+        // Let's notify the employee responsible for the reservation.
+        if (saved.getReservation().getEmploye() != null) {
+            notificationService.envoyerNotification(saved.getReservation().getEmploye(),
+                    "Nouveau Paiement",
+                    "Un paiement de " + saved.getMontant() + " MAD a été reçu pour la réservation #"
+                            + saved.getReservation().getId(),
+                    com.example.Gestion_Flotte_Automobile.enums.TypeNotification.CONFIRMATION);
+        }
+
+        return saved;
     }
 
     @Override

@@ -47,7 +47,8 @@ public class ReservationServiceImpl implements ReservationService {
                 com.example.Gestion_Flotte_Automobile.enums.StatutVoiture.EN_RESERVATION);
 
         notificationService.envoyerNotification(saved.getEmploye(), "Nouvelle Réservation",
-                "Une nouvelle réservation a été créée pour la voiture " + saved.getVoiture().getImmatriculation());
+                "Une nouvelle réservation a été créée pour la voiture " + saved.getVoiture().getImmatriculation(),
+                com.example.Gestion_Flotte_Automobile.enums.TypeNotification.INFORMATION);
 
         return saved;
     }
@@ -122,7 +123,8 @@ public class ReservationServiceImpl implements ReservationService {
                     com.example.Gestion_Flotte_Automobile.enums.StatutVoiture.DISPONIBLE);
 
             notificationService.envoyerNotification(reservation.getEmploye(), "Réservation Annulée",
-                    "La réservation " + id + " a été annulée.");
+                    "La réservation " + id + " a été annulée.",
+                    com.example.Gestion_Flotte_Automobile.enums.TypeNotification.ALERTE);
         }
     }
 }

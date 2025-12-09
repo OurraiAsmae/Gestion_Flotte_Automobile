@@ -59,7 +59,8 @@
                     <div class="mb-3" th:if="${employes != null}">
                         <label for="employe" class="form-label">Employé responsable</label>
                         <select class="form-select" id="employe" th:field="*{employe}">
-                            <option th:each="e : ${employes}" th:value="${e.id}" th:text="${e.prenom + ' ' + e.nom}">
+                            <option value="">-- Sélectionner un employé --</option>
+                            <option th:each="e : ${employes}" th:value="${e.id}" th:text="${e.prenom} + ' ' + ${e.nom}">
                             </option>
                         </select>
                     </div>

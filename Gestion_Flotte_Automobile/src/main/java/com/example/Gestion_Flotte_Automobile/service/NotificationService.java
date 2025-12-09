@@ -22,4 +22,7 @@ public interface NotificationService {
 
     void envoyerNotification(com.example.Gestion_Flotte_Automobile.entity.User destinataire, String titre,
             String message);
+
+    void envoyerNotification(com.example.Gestion_Flotte_Automobile.entity.User destinataire, String titre,
+            String message, com.example.Gestion_Flotte_Automobile.enums.TypeNotification type);
 }

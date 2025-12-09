@@ -65,11 +65,19 @@ public class NotificationServiceImpl implements NotificationService {
     @Transactional
     public void envoyerNotification(com.example.Gestion_Flotte_Automobile.entity.User destinataire, String titre,
             String message) {
+        envoyerNotification(destinataire, titre, message,
+                com.example.Gestion_Flotte_Automobile.enums.TypeNotification.INFORMATION);
+    }
+
+    @Override
+    @Transactional
+    public void envoyerNotification(com.example.Gestion_Flotte_Automobile.entity.User destinataire, String titre,
+            String message, com.example.Gestion_Flotte_Automobile.enums.TypeNotification type) {
         Notification notification = new Notification();
         notification.setDestinataire(destinataire);
         notification.setTitre(titre);
         notification.setMessage(message);
-        notification.setTypeNotification(com.example.Gestion_Flotte_Automobile.enums.TypeNotification.INFO);
+        notification.setTypeNotification(type);
 
         notification.setDateEnvoi(java.time.LocalDateTime.now());
         notification.setLu(false);
