@@ -201,3 +201,7 @@ body {
     font-weight: 700;
     font-size: 1.2rem;
 }
+
+.bg-indigo {
+    background-color: #6366f1 !important;
+}

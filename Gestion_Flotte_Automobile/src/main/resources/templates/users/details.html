@@ -3,37 +3,100 @@
 
 <body th:remove="tag">
     <div th:fragment="content">
-        <div class="card">
-            <div class="card-header d-flex justify-content-between align-items-center">
-                <h3>Détails de l'utilisateur</h3>
-                <a th:href="@{/users}" class="btn btn-secondary">Retour</a>
-            </div>
-            <div class="card-body">
-                <dl class="row">
-                    <dt class="col-sm-3">ID</dt>
-                    <dd class="col-sm-9" th:text="${user.id}"></dd>
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="card shadow-custom border-0 rounded-custom overflow-hidden">
+                    <div class="card-header bg-white border-bottom py-4">
+                        <div class="d-flex align-items-center">
+                            <div class="avatar-circle me-4 bg-primary text-white fw-bold d-flex align-items-center justify-content-center fs-3 shadow-sm"
+                                style="width: 64px; height: 64px; border-radius: 50%;">
+                                <span
+                                    th:text="${#strings.substring(user.prenom,0,1) + #strings.substring(user.nom,0,1)}"></span>
+                            </div>
+                            <div>
+                                <h3 class="mb-1 fw-bold text-dark" th:text="${user.prenom + ' ' + user.nom}"></h3>
+                                <div class="d-flex align-items-center gap-2">
+                                    <span class="badge rounded-pill"
+                                        th:classappend="${user.role.name() == 'GERANT' ? 'bg-indigo' : 'bg-info text-dark bg-opacity-25'}"
+                                        th:text="${user.role}"></span>
+                                    <span class="text-muted small">|</span>
+                                    <span class="small text-muted" th:text="'ID: ' + ${user.id}"></span>
+                                </div>
+                            </div>
+                            <div class="ms-auto">
+                                <span th:if="${user.statut.name() == 'ACTIF'}"
+                                    class="badge bg-success bg-opacity-10 text-success rounded-pill px-3 py-2">
+                                    <i class="bi bi-check-circle-fill me-1"></i> Actif
+                                </span>
+                                <span th:unless="${user.statut.name() == 'ACTIF'}"
+                                    class="badge bg-secondary bg-opacity-10 text-secondary rounded-pill px-3 py-2">
+                                    <i class="bi bi-dash-circle-fill me-1"></i> Inactif
+                                </span>
+                            </div>
+                        </div>
+                    </div>
 
-                    <dt class="col-sm-3">Nom complet</dt>
-                    <dd class="col-sm-9" th:text="${user.prenom + ' ' + user.nom}"></dd>
+                    <div class="card-body p-4">
+                        <div class="row g-4">
+                            <div class="col-md-6">
+                                <div class="p-3 bg-light rounded-custom h-100">
+                                    <h6 class="text-uppercase text-muted fw-bold small mb-3">Coordonnées</h6>
 
-                    <dt class="col-sm-3">Email</dt>
-                    <dd class="col-sm-9" th:text="${user.email}"></dd>
+                                    <div class="mb-3">
+                                        <label class="small text-muted d-block mb-1">Email</label>
+                                        <div class="d-flex align-items-center">
+                                            <i class="bi bi-envelope text-primary me-2"></i>
+                                            <span class="fw-medium text-dark" th:text="${user.email}"></span>
+                                        </div>
+                                    </div>
 
-                    <dt class="col-sm-3">Téléphone</dt>
-                    <dd class="col-sm-9" th:text="${user.telephone}"></dd>
+                                    <div>
+                                        <label class="small text-muted d-block mb-1">Téléphone</label>
+                                        <div class="d-flex align-items-center">
+                                            <i class="bi bi-telephone text-primary me-2"></i>
+                                            <span class="fw-medium text-dark"
+                                                th:text="${user.telephone ?: 'Non renseigné'}"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
 
-                    <dt class="col-sm-3">Rôle</dt>
-                    <dd class="col-sm-9"><span class="badge bg-info" th:text="${user.role}"></span></dd>
+                            <div class="col-md-6">
+                                <div class="p-3 bg-light rounded-custom h-100">
+                                    <h6 class="text-uppercase text-muted fw-bold small mb-3">Informations Système</h6>
 
-                    <dt class="col-sm-3">Statut</dt>
-                    <dd class="col-sm-9">
-                        <span th:if="${user.statut.name() == 'ACTIF'}" class="badge bg-success">Actif</span>
-                        <span th:if="${user.statut.name() == 'INACTIF'}" class="badge bg-secondary">Inactif</span>
-                    </dd>
-                </dl>
-            </div>
-            <div class="card-footer">
-                <a th:href="@{/users/edit/{id}(id=${user.id})}" class="btn btn-warning">Modifier</a>
+                                    <div class="mb-3">
+                                        <label class="small text-muted d-block mb-1">Rôle</label>
+                                        <div class="d-flex align-items-center">
+                                            <i class="bi bi-shield-lock text-primary me-2"></i>
+                                            <span class="fw-medium text-dark" th:text="${user.role}"></span>
+                                        </div>
+                                    </div>
+
+                                    <div>
+                                        <label class="small text-muted d-block mb-1">Statut du compte</label>
+                                        <div class="d-flex align-items-center">
+                                            <i class="bi bi-toggle-on text-primary me-2"></i>
+                                            <span class="fw-medium text-dark" th:text="${user.statut}"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card-footer bg-white border-top py-3 px-4">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <a th:href="@{/users}" class="btn btn-outline-secondary border-0 hover-lift">
+                                <i class="bi bi-arrow-left me-2"></i>Retour à la liste
+                            </a>
+                            <a th:href="@{/users/edit/{id}(id=${user.id})}"
+                                class="btn btn-warning text-white shadow-sm hover-lift">
+                                <i class="bi bi-pencil-square me-2"></i>Modifier le profil
+                            </a>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

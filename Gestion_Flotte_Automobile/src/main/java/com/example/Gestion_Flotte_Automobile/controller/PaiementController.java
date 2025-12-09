@@ -23,6 +23,7 @@ public class PaiementController {
     @GetMapping
     public String listPaiements(Model model) {
         model.addAttribute("paiements", paiementService.findAll());
+        model.addAttribute("statuts", StatutPaiement.values());
         return "paiements/list";
     }
 

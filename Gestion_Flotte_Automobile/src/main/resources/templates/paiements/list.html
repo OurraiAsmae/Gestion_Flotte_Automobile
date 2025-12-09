@@ -30,9 +30,19 @@
                     <td th:text="${paiement.datePaiement}"></td>
                     <td th:text="${paiement.typePaiement}"></td>
                     <td>
-                        <span th:text="${paiement.statut}" class="badge" th:classappend="${paiement.statut.name() == 'VALIDE' ? 'bg-success' : 
-                                  (paiement.statut.name() == 'EN_ATTENTE' ? 'bg-warning' : 'bg-danger')}">
-                        </span>
+                        <form th:action="@{/paiements/update/{id}(id=${paiement.id})}" method="post">
+                            <select name="statut" class="form-select form-select-sm" onchange="this.form.submit()"
+                                style="width: auto; min-width: 130px;"
+                                th:classappend="${paiement.statut.name() == 'PAYE' ? 'text-success border-success' : 
+                                                    (paiement.statut.name() == 'EN_ATTENTE' ? 'text-warning border-warning' : '')}">
+                                <option th:each="s : ${statuts}" th:value="${s}" th:text="${s.name() == 'EN_ATTENTE' ? 'En attente' : 
+                                                  (s.name() == 'PAYE' ? 'Payé' : 
+                                                  (s.name() == 'ANNULE' ? 'Annulé' : 
+                                                  (s.name() == 'ECHEC' ? 'Échec' : s.name())))}"
+                                    th:selected="${s == paiement.statut}">
+                                </option>
+                            </select>
+                        </form>
                     </td>
                 </tr>
             </tbody>
