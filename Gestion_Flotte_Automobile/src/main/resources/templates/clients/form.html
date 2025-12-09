@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html th:replace="layout/layout :: layout(~{::body})">
+
+<body th:remove="tag">
+    <div class="card">
+        <div class="card-header">
+            <h3 th:text="${client.id == null ? 'Ajouter un client' : 'Modifier le client'}"></h3>
+        </div>
+        <div class="card-body">
+            <form th:action="${client.id == null ? '/clients' : '/clients/update/' + client.id}" th:object="${client}"
+                method="post">
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label for="nom" class="form-label">Nom</label>
+                        <input type="text" class="form-control" id="nom" th:field="*{nom}" required>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="prenom" class="form-label">Prénom</label>
+                        <input type="text" class="form-control" id="prenom" th:field="*{prenom}" required>
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label for="cin" class="form-label">CIN</label>
+                    <input type="text" class="form-control" id="cin" th:field="*{cin}" required>
+                </div>
+                <div class="mb-3">
+                    <label for="telephone" class="form-label">Téléphone</label>
+                    <input type="text" class="form-control" id="telephone" th:field="*{telephone}" required>
+                </div>
+                <div class="mb-3">
+                    <label for="email" class="form-label">Email</label>
+                    <input type="email" class="form-control" id="email" th:field="*{email}" required>
+                </div>
+                <div class="mb-3">
+                    <label for="adresse" class="form-label">Adresse</label>
+                    <textarea class="form-control" id="adresse" th:field="*{adresse}" rows="3"></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary">Enregistrer</button>
+                <a th:href="@{/clients}" class="btn btn-secondary">Annuler</a>
+            </form>
+        </div>
+    </div>
+</body>
+
+</html>

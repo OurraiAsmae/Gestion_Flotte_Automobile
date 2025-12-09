@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html th:replace="layout/layout :: layout(~{::body})">
+
+<body th:remove="tag">
+    <div class="card">
+        <div class="card-header">
+            <h3>Ajouter un entretien</h3>
+        </div>
+        <div class="card-body">
+            <form th:action="@{/entretiens}" th:object="${entretien}" method="post">
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label for="voiture" class="form-label">Voiture</label>
+                        <select class="form-select" id="voiture" th:field="*{voiture}" required>
+                            <option value="">-- Sélectionner une voiture --</option>
+                            <option th:each="v : ${voitures}" th:value="${v.id}"
+                                th:text="${v.marque + ' ' + v.modele + ' (' + v.immatriculation + ')'}"></option>
+                        </select>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="typeEntretien" class="form-label">Type d'entretien</label>
+                        <select class="form-select" id="typeEntretien" th:field="*{typeEntretien}">
+                            <option th:each="t : ${types}" th:value="${t}" th:text="${t}"></option>
+                        </select>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label for="dateEntretien" class="form-label">Date</label>
+                        <input type="date" class="form-control" id="dateEntretien" th:field="*{dateEntretien}" required>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="cout" class="form-label">Coût (MAD)</label>
+                        <input type="number" step="0.01" class="form-control" id="cout" th:field="*{cout}" required>
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label for="prestataire" class="form-label">Prestataire</label>
+                    <input type="text" class="form-control" id="prestataire" th:field="*{prestataire}">
+                </div>
+                <div class="mb-3">
+                    <label for="description" class="form-label">Description</label>
+                    <textarea class="form-control" id="description" th:field="*{description}" rows="3"></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary">Enregistrer</button>
+                <a th:href="@{/entretiens}" class="btn btn-secondary">Annuler</a>
+            </form>
+        </div>
+    </div>
+</body>
+
+</html>

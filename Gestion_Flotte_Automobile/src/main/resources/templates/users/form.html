@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html th:replace="layout/layout :: layout(~{::body})">
+
+<body th:remove="tag">
+    <div class="card">
+        <div class="card-header">
+            <h3 th:text="${user.id == null ? 'Ajouter un utilisateur' : 'Modifier l\'utilisateur'}"></h3>
+        </div>
+        <div class="card-body">
+            <!-- Add th:action URL -->
+            <form th:action="${user.id == null ? '/users' : '/users/update/' + user.id}" th:object="${user}"
+                method="post">
+                <div class="mb-3">
+                    <label for="nom" class="form-label">Nom</label>
+                    <input type="text" class="form-control" id="nom" th:field="*{nom}" required>
+                </div>
+                <div class="mb-3">
+                    <label for="prenom" class="form-label">Prénom</label>
+                    <input type="text" class="form-control" id="prenom" th:field="*{prenom}" required>
+                </div>
+                <!-- Fix email field -->
+                <div class="mb-3">
+                    <label for="email" class="form-label">Email</label>
+                    <input type="email" class="form-control" id="email" th:field="*{email}" required>
+                </div>
+                <!-- Remove password field in edit mode or handle it -->
+                <div class="mb-3" th:if="${user.id == null}">
+                    <label for="motDePasse" class="form-label">Mot de passe</label>
+                    <input type="password" class="form-control" id="motDePasse" th:field="*{motDePasse}" required>
+                </div>
+                <div class="mb-3">
+                    <label for="telephone" class="form-label">Téléphone</label>
+                    <input type="text" class="form-control" id="telephone" th:field="*{telephone}">
+                </div>
+                <!-- Role Selection -->
+                <!-- Role Selection -->
+                <div class="mb-3">
+                    <label for="role" class="form-label">Rôle</label>
+                    <select class="form-select" id="role" th:field="*{role}">
+                        <option th:each="r : ${roles}" th:value="${r}" th:text="${r}"></option>
+                    </select>
+                </div>
+                <!-- Statut Selection -->
+                <div class="mb-3">
+                    <label for="statut" class="form-label">Statut</label>
+                    <select class="form-select" id="statut" th:field="*{statut}">
+                        <option th:each="s : ${statuts}" th:value="${s}" th:text="${s}"></option>
+                    </select>
+                </div>
+
+                <button type="submit" class="btn btn-primary">Enregistrer</button>
+                <a th:href="@{/users}" class="btn btn-secondary">Annuler</a>
+            </form>
+        </div>
+    </div>
+</body>
+
+</html>

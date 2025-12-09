@@ -1,0 +1,71 @@
+package com.example.Gestion_Flotte_Automobile.controller;
+
+import com.example.Gestion_Flotte_Automobile.entity.Voiture;
+import com.example.Gestion_Flotte_Automobile.enums.StatutVoiture;
+import com.example.Gestion_Flotte_Automobile.service.VoitureService;
+import lombok.AllArgsConstructor;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.Optional;
+
+@Controller
+@AllArgsConstructor
+@RequestMapping("/voitures")
+public class VoitureController {
+
+    private final VoitureService voitureService;
+
+    @GetMapping
+    public String listVoitures(Model model) {
+        model.addAttribute("voitures", voitureService.findAll());
+        return "voitures/list";
+    }
+
+    @GetMapping("/new")
+    public String showCreateForm(Model model) {
+        model.addAttribute("voiture", new Voiture());
+        model.addAttribute("statuts", StatutVoiture.values());
+        return "voitures/form";
+    }
+
+    @PostMapping
+    public String saveVoiture(@ModelAttribute("voiture") Voiture voiture) {
+        voitureService.save(voiture);
+        return "redirect:/voitures";
+    }
+
+    @GetMapping("/edit/{id}")
+    public String showEditForm(@PathVariable Long id, Model model) {
+        Optional<Voiture> voiture = voitureService.findById(id);
+        if (voiture.isPresent()) {
+            model.addAttribute("voiture", voiture.get());
+            model.addAttribute("statuts", StatutVoiture.values());
+            return "voitures/form";
+        }
+        return "redirect:/voitures";
+    }
+
+    @PostMapping("/update/{id}")
+    public String updateVoiture(@PathVariable Long id, @ModelAttribute("voiture") Voiture voiture) {
+        voitureService.update(id, voiture);
+        return "redirect:/voitures";
+    }
+
+    @GetMapping("/delete/{id}")
+    public String deleteVoiture(@PathVariable Long id) {
+        voitureService.deleteById(id);
+        return "redirect:/voitures";
+    }
+
+    @GetMapping("/{id}")
+    public String voitureDetails(@PathVariable Long id, Model model) {
+        Optional<Voiture> voiture = voitureService.findById(id);
+        if (voiture.isPresent()) {
+            model.addAttribute("voiture", voiture.get());
+            return "voitures/details";
+        }
+        return "redirect:/voitures";
+    }
+}

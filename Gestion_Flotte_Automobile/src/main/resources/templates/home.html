@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html th:replace="layout/layout :: layout(~{::body})">
+
+<body th:remove="tag">
+    <div class="jumbotron p-5 mb-4 bg-light rounded-3">
+        <div class="container-fluid py-5">
+            <h1 class="display-5 fw-bold">Bienvenue dans la plateforme de gestion de flotte automobile</h1>
+            <p class="col-md-8 fs-4">Gérez facilement vos véhicules, clients, réservations et entretiens.</p>
+            <a class="btn btn-primary btn-lg" href="/voitures" role="button">Voir les voitures</a>
+        </div>
+    </div>
+
+    <div class="row align-items-md-stretch">
+        <div class="col-md-4 mb-4">
+            <div class="h-100 p-5 text-white bg-dark rounded-3">
+                <h2>Voitures</h2>
+                <p class="fs-2 fw-bold" th:text="${nbVoituresDispo} + ' Disponibles'"></p>
+                <p>Consultez la liste des véhicules, ajoutez de nouvelles voitures et gérez leur statut.</p>
+                <a href="/voitures" class="btn btn-outline-light" type="button">Gérer</a>
+            </div>
+        </div>
+        <div class="col-md-4 mb-4">
+            <div class="h-100 p-5 bg-light border rounded-3">
+                <h2>Réservations</h2>
+                <p class="fs-2 fw-bold" th:text="${nbReservations} + ' En Cours'"></p>
+                <p>Créez et suivez les réservations pour vos clients.</p>
+                <a href="/reservations" class="btn btn-outline-secondary" type="button">Gérer</a>
+            </div>
+        </div>
+        <div class="col-md-4 mb-4">
+            <div class="h-100 p-5 text-white bg-secondary rounded-3">
+                <h2>Clients</h2>
+                <p class="fs-2 fw-bold" th:text="${nbClients} + ' Clients'"></p>
+                <p>Gérez votre base de clients et leurs informations.</p>
+                <a href="/clients" class="btn btn-outline-light" type="button">Gérer</a>
+            </div>
+        </div>
+        <div class="col-md-6 mb-4">
+            <div class="h-100 p-5 bg-light border rounded-3">
+                <h2>Entretiens</h2>
+                <p class="fs-2 fw-bold" th:text="${nbEntretiens} + ' En Attente'"></p>
+                <a href="/entretiens" class="btn btn-outline-secondary" type="button">Gérer</a>
+            </div>
+        </div>
+        <div class="col-md-6 mb-4">
+            <div class="h-100 p-5 text-white bg-info rounded-3">
+                <h2>Paiements</h2>
+                <p class="fs-2 fw-bold" th:text="${nbPaiements} + ' En Attente'"></p>
+                <a href="/paiements" class="btn btn-outline-light" type="button">Gérer</a>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

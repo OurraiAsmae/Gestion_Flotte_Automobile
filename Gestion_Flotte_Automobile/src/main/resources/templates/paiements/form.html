@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html th:replace="layout/layout :: layout(~{::body})">
+
+<body th:remove="tag">
+    <div class="card">
+        <div class="card-header">
+            <h3>Nouveau paiement</h3>
+        </div>
+        <div class="card-body">
+            <form th:action="@{/paiements}" th:object="${paiement}" method="post">
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label for="client" class="form-label">Client</label>
+                        <select class="form-select" id="client" th:field="*{client}" required>
+                            <option value="">-- Sélectionner un client --</option>
+                            <option th:each="c : ${clients}" th:value="${c.id}" th:text="${c.prenom + ' ' + c.nom}">
+                            </option>
+                        </select>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="voiture" class="form-label">Voiture</label>
+                        <select class="form-select" id="voiture" th:field="*{voiture}" required>
+                            <option value="">-- Sélectionner une voiture --</option>
+                            <option th:each="v : ${voitures}" th:value="${v.id}"
+                                th:text="${v.marque + ' ' + v.modele + ' (' + v.immatriculation + ')'}"></option>
+                        </select>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label for="montant" class="form-label">Montant (MAD)</label>
+                        <input type="number" step="0.01" class="form-control" id="montant" th:field="*{montant}"
+                            required>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="datePaiement" class="form-label">Date</label>
+                        <input type="date" class="form-control" id="datePaiement" th:field="*{datePaiement}" required>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label for="typePaiement" class="form-label">Type de paiement</label>
+                        <select class="form-select" id="typePaiement" th:field="*{typePaiement}">
+                            <option th:each="t : ${types}" th:value="${t}" th:text="${t}"></option>
+                        </select>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="statut" class="form-label">Statut</label>
+                        <select class="form-select" id="statut" th:field="*{statut}">
+                            <option th:each="s : ${statuts}" th:value="${s}" th:text="${s}"></option>
+                        </select>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary">Enregistrer</button>
+                <a th:href="@{/paiements}" class="btn btn-secondary">Annuler</a>
+            </form>
+        </div>
+    </div>
+</body>
+
+</html>

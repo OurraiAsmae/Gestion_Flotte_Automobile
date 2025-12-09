@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html th:replace="layout/layout :: layout(~{::body})">
+
+<body th:remove="tag">
+    <!-- This file was requested but list view handles most details. 
+         Creating a simple detail view just in case. -->
+    <div class="card">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <h3>Détail Notification</h3>
+            <a th:href="@{/notifications}" class="btn btn-secondary">Retour</a>
+        </div>
+        <div class="card-body">
+            <h5 class="card-title" th:text="${notification.titre}"></h5>
+            <h6 class="card-subtitle mb-2 text-muted" th:text="${notification.dateEnvoi}"></h6>
+            <p class="card-text" th:text="${notification.message}"></p>
+            <span class="badge bg-secondary" th:text="${notification.typeNotification}"></span>
+            <span th:if="${notification.lu}" class="badge bg-success">Lu</span>
+            <span th:if="${!notification.lu}" class="badge bg-warning">Non lu</span>
+        </div>
+        <div class="card-footer" th:if="${!notification.lu}">
+            <a th:href="@{/notifications/read/{id}(id=${notification.id})}" class="btn btn-primary">Marquer comme
+                lu</a>
+        </div>
+    </div>
+</body>
+
+</html>

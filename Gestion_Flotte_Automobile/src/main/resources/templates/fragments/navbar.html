@@ -1,0 +1,125 @@
+<nav th:fragment="navbar" xmlns:th="http://www.thymeleaf.org"
+    xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+    class="navbar navbar-expand-lg navbar-dark navbar-custom">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="/">
+            <i class="bi bi-car-front-fill me-2"></i>Gestion Flotte
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav me-auto">
+                <!-- GERANT Menu -->
+                <li class="nav-item" sec:authorize="hasRole('GERANT')">
+                    <a class="nav-link" th:href="@{/gerant/home}">
+                        <i class="bi bi-speedometer2"></i> Dashboard
+                    </a>
+                </li>
+                <li class="nav-item" sec:authorize="hasRole('GERANT')">
+                    <a class="nav-link" th:href="@{/voitures}">
+                        <i class="bi bi-car-front"></i> Voitures
+                    </a>
+                </li>
+                <li class="nav-item" sec:authorize="hasRole('GERANT')">
+                    <a class="nav-link" th:href="@{/users}">
+                        <i class="bi bi-people"></i> Employés
+                    </a>
+                </li>
+                <li class="nav-item" sec:authorize="hasRole('GERANT')">
+                    <a class="nav-link" th:href="@{/clients}">
+                        <i class="bi bi-person-badge"></i> Clients
+                    </a>
+                </li>
+                <li class="nav-item" sec:authorize="hasRole('GERANT')">
+                    <a class="nav-link" th:href="@{/reservations}">
+                        <i class="bi bi-calendar-check"></i> Réservations
+                    </a>
+                </li>
+                <li class="nav-item" sec:authorize="hasRole('GERANT')">
+                    <a class="nav-link" th:href="@{/entretiens}">
+                        <i class="bi bi-tools"></i> Entretiens
+                    </a>
+                </li>
+                <li class="nav-item" sec:authorize="hasRole('GERANT')">
+                    <a class="nav-link" th:href="@{/paiements}">
+                        <i class="bi bi-cash-stack"></i> Paiements
+                    </a>
+                </li>
+                <li class="nav-item" sec:authorize="hasRole('GERANT')">
+                    <a class="nav-link" th:href="@{/notifications}">
+                        <i class="bi bi-bell"></i> Notifications
+                    </a>
+                </li>
+
+                <!-- EMPLOYE Menu -->
+                <li class="nav-item" sec:authorize="hasRole('EMPLOYE')">
+                    <a class="nav-link" th:href="@{/employe/home}">
+                        <i class="bi bi-speedometer2"></i> Dashboard
+                    </a>
+                </li>
+                <li class="nav-item" sec:authorize="hasRole('EMPLOYE')">
+                    <a class="nav-link" th:href="@{/voitures}">
+                        <i class="bi bi-car-front"></i> Voitures
+                    </a>
+                </li>
+                <li class="nav-item" sec:authorize="hasRole('EMPLOYE')">
+                    <a class="nav-link" th:href="@{/reservations/new}">
+                        <i class="bi bi-plus-circle"></i> Créer réservation
+                    </a>
+                </li>
+                <li class="nav-item" sec:authorize="hasRole('EMPLOYE')">
+                    <a class="nav-link" th:href="@{/clients}">
+                        <i class="bi bi-person-badge"></i> Clients
+                    </a>
+                </li>
+                <li class="nav-item" sec:authorize="hasRole('EMPLOYE')">
+                    <a class="nav-link" th:href="@{/entretiens}">
+                        <i class="bi bi-tools"></i> Entretiens
+                    </a>
+                </li>
+                <li class="nav-item" sec:authorize="hasRole('EMPLOYE')">
+                    <a class="nav-link" th:href="@{/paiements}">
+                        <i class="bi bi-cash-stack"></i> Paiements
+                    </a>
+                </li>
+                <li class="nav-item" sec:authorize="hasRole('EMPLOYE')">
+                    <a class="nav-link" th:href="@{/notifications}">
+                        <i class="bi bi-bell"></i> Notifications
+                    </a>
+                </li>
+            </ul>
+            <ul class="navbar-nav">
+                <li class="nav-item" sec:authorize="!isAuthenticated()">
+                    <a class="nav-link" th:href="@{/login}">
+                        <i class="bi bi-box-arrow-in-right"></i> Connexion
+                    </a>
+                </li>
+                <li class="nav-item dropdown" sec:authorize="isAuthenticated()">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                        data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="bi bi-person-circle"></i> <span sec:authentication="name">Utilisateur</span>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end shadow-custom border-0" aria-labelledby="navbarDropdown">
+                        <li>
+                            <a class="dropdown-item" th:href="@{/profile}">
+                                <i class="bi bi-person-circle"></i> Mon Profil
+                            </a>
+                        </li>
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
+                        <li>
+                            <form th:action="@{/logout}" method="post">
+                                <button type="submit" class="dropdown-item text-danger">
+                                    <i class="bi bi-box-arrow-right"></i> Déconnexion
+                                </button>
+                            </form>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>

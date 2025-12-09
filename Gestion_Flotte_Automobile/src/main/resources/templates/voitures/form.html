@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html th:replace="layout/layout :: layout(~{::body})">
+
+<body th:remove="tag">
+    <div class="card">
+        <div class="card-header">
+            <h3 th:text="${voiture.id == null ? 'Ajouter une voiture' : 'Modifier la voiture'}"></h3>
+        </div>
+        <div class="card-body">
+            <form th:action="${voiture.id == null ? '/voitures' : '/voitures/update/' + voiture.id}"
+                th:object="${voiture}" method="post">
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label for="immatriculation" class="form-label">Immatriculation</label>
+                        <input type="text" class="form-control" id="immatriculation" th:field="*{immatriculation}"
+                            required>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="marque" class="form-label">Marque</label>
+                        <input type="text" class="form-control" id="marque" th:field="*{marque}" required>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label for="modele" class="form-label">Modèle</label>
+                        <input type="text" class="form-control" id="modele" th:field="*{modele}" required>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="annee" class="form-label">Année</label>
+                        <input type="number" class="form-control" id="annee" th:field="*{annee}" required>
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label for="kilometrageActuel" class="form-label">Kilométrage Actuel</label>
+                    <input type="number" class="form-control" id="kilometrageActuel" th:field="*{kilometrageActuel}"
+                        required>
+                </div>
+                <div class="mb-3">
+                    <label for="statut" class="form-label">Statut</label>
+                    <select class="form-select" id="statut" th:field="*{statut}">
+                        <option th:each="s : ${statuts}" th:value="${s}" th:text="${s}"></option>
+                    </select>
+                </div>
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label for="dateMiseEnService" class="form-label">Date Mise en Service</label>
+                        <input type="date" class="form-control" id="dateMiseEnService" th:field="*{dateMiseEnService}">
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="dateProchaineVidange" class="form-label">Date Prochaine Vidange</label>
+                        <input type="date" class="form-control" id="dateProchaineVidange"
+                            th:field="*{dateProchaineVidange}">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label for="dateProchaineVisiteTechnique" class="form-label">Date Prochaine Visite
+                            Technique</label>
+                        <input type="date" class="form-control" id="dateProchaineVisiteTechnique"
+                            th:field="*{dateProchaineVisiteTechnique}">
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="dateExpirationAssurance" class="form-label">Date Expiration Assurance</label>
+                        <input type="date" class="form-control" id="dateExpirationAssurance"
+                            th:field="*{dateExpirationAssurance}">
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary">Enregistrer</button>
+                <a th:href="@{/voitures}" class="btn btn-secondary">Annuler</a>
+            </form>
+        </div>
+    </div>
+</body>
+
+</html>
