@@ -4,5 +4,5 @@ public enum TypeNotification {
     INFORMATION,
     RAPPEL,
     ALERTE,
-    CONFIRMATION
+    INFO, CONFIRMATION
 }
