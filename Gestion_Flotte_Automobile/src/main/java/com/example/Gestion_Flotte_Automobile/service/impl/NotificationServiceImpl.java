@@ -14,14 +14,46 @@ public class NotificationServiceImpl implements NotificationService {
 
     private final NotificationRepository notificationRepository;
 
-    public NotificationServiceImpl(NotificationRepository notificationRepository) {
+    private final com.example.Gestion_Flotte_Automobile.repository.UserRepository userRepository;
+
+    public NotificationServiceImpl(NotificationRepository notificationRepository,
+            com.example.Gestion_Flotte_Automobile.repository.UserRepository userRepository) {
         this.notificationRepository = notificationRepository;
+        this.userRepository = userRepository;
     }
 
     @Override
     @Transactional
     public Notification save(Notification notification) {
         return notificationRepository.save(notification);
+    }
+
+    // ... existing methods ...
+
+    @Override
+    @Transactional
+    public void envoyerNotificationAuxGerants(String titre, String message) {
+        List<com.example.Gestion_Flotte_Automobile.entity.User> gerants = userRepository
+                .findByRole(com.example.Gestion_Flotte_Automobile.enums.Role.GERANT);
+        for (com.example.Gestion_Flotte_Automobile.entity.User gerant : gerants) {
+            envoyerNotification(gerant, titre, message,
+                    com.example.Gestion_Flotte_Automobile.enums.TypeNotification.INFORMATION);
+        }
+    }
+
+    @Override
+    @Transactional
+    public void envoyerNotification(com.example.Gestion_Flotte_Automobile.entity.User destinataire, String titre,
+            String message, com.example.Gestion_Flotte_Automobile.enums.TypeNotification type) {
+        Notification notification = new Notification();
+        notification.setDestinataire(destinataire);
+        notification.setTitre(titre);
+        notification.setMessage(message);
+        notification.setTypeNotification(type);
+
+        notification.setDateEnvoi(java.time.LocalDateTime.now());
+        notification.setLu(false);
+        notificationRepository.save(notification);
     }
 
     @Override
@@ -69,18 +101,4 @@ public class NotificationServiceImpl implements NotificationService {
                 com.example.Gestion_Flotte_Automobile.enums.TypeNotification.INFORMATION);
     }
 
-    @Override
-    @Transactional
-    public void envoyerNotification(com.example.Gestion_Flotte_Automobile.entity.User destinataire, String titre,
-            String message, com.example.Gestion_Flotte_Automobile.enums.TypeNotification type) {
-        Notification notification = new Notification();
-        notification.setDestinataire(destinataire);
-        notification.setTitre(titre);
-        notification.setMessage(message);
-        notification.setTypeNotification(type);
-
-        notification.setDateEnvoi(java.time.LocalDateTime.now());
-        notification.setLu(false);
-        notificationRepository.save(notification);
-    }
 }

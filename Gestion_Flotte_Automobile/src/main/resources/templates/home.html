@@ -3,54 +3,162 @@
 
 <body th:remove="tag">
     <div th:fragment="content">
-        <div class="jumbotron p-5 mb-4 bg-light rounded-3">
-            <div class="container-fluid py-5">
-                <h1 class="display-5 fw-bold">Bienvenue dans la plateforme de gestion de flotte automobile</h1>
-                <p class="col-md-8 fs-4">Gérez facilement vos véhicules, clients, réservations et entretiens.</p>
-                <a class="btn btn-primary btn-lg" href="/voitures" role="button">Voir les voitures</a>
+        <!-- Welcome Section -->
+        <div
+            class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+            <h1 class="h2 text-primary"><i class="bi bi-speedometer2 me-2"></i>Tableau de Bord</h1>
+            <div class="btn-toolbar mb-2 mb-md-0">
+                <div class="btn-group me-2">
+                    <a href="/calendar" class="btn btn-sm btn-outline-secondary">
+                        <i class="bi bi-calendar-event me-1"></i>Calendrier
+                    </a>
+                </div>
             </div>
         </div>
 
-        <div class="row align-items-md-stretch">
-            <div class="col-md-4 mb-4">
-                <div class="h-100 p-5 text-white bg-dark rounded-3">
-                    <h2>Voitures</h2>
-                    <p class="fs-2 fw-bold" th:text="${nbVoituresDispo} + ' Disponibles'"></p>
-                    <p>Consultez la liste des véhicules, ajoutez de nouvelles voitures et gérez leur statut.</p>
-                    <a href="/voitures" class="btn btn-outline-light" type="button">Gérer</a>
+        <!-- Stats Cards -->
+        <div class="row g-4 mb-4">
+            <!-- Voitures Disponibles -->
+            <div class="col-xl-3 col-md-6">
+                <div class="card bg-primary text-white h-100 shadow-sm border-0">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <h6 class="text-uppercase mb-1 opacity-75">Voitures Disponibles</h6>
+                                <h2 class="display-6 fw-bold mb-0" th:text="${voituresDisponibles}">0</h2>
+                            </div>
+                            <i class="bi bi-car-front fs-1 opacity-50"></i>
+                        </div>
+                    </div>
+                    <div class="card-footer bg-transparent border-top-0">
+                        <a href="/voitures" class="text-white text-decoration-none small stretched-link">
+                            Voir le détail <i class="bi bi-chevron-right ms-1"></i>
+                        </a>
+                    </div>
                 </div>
             </div>
-            <div class="col-md-4 mb-4">
-                <div class="h-100 p-5 bg-light border rounded-3">
-                    <h2>Réservations</h2>
-                    <p class="fs-2 fw-bold" th:text="${nbReservations} + ' En Cours'"></p>
-                    <p>Créez et suivez les réservations pour vos clients.</p>
-                    <a href="/reservations" class="btn btn-outline-secondary" type="button">Gérer</a>
+
+            <!-- Réservations en Cours -->
+            <div class="col-xl-3 col-md-6">
+                <div class="card bg-success text-white h-100 shadow-sm border-0">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <h6 class="text-uppercase mb-1 opacity-75">Réservations Actives</h6>
+                                <h2 class="display-6 fw-bold mb-0" th:text="${reservationsEnCours}">0</h2>
+                            </div>
+                            <i class="bi bi-calendar-check fs-1 opacity-50"></i>
+                        </div>
+                    </div>
+                    <div class="card-footer bg-transparent border-top-0">
+                        <a href="/reservations" class="text-white text-decoration-none small stretched-link">
+                            Gérer <i class="bi bi-chevron-right ms-1"></i>
+                        </a>
+                    </div>
                 </div>
             </div>
-            <div class="col-md-4 mb-4">
-                <div class="h-100 p-5 text-white bg-secondary rounded-3">
-                    <h2>Clients</h2>
-                    <p class="fs-2 fw-bold" th:text="${nbClients} + ' Clients'"></p>
-                    <p>Gérez votre base de clients et leurs informations.</p>
-                    <a href="/clients" class="btn btn-outline-light" type="button">Gérer</a>
+
+            <!-- Entretiens en Attente -->
+            <div class="col-xl-3 col-md-6">
+                <div class="card bg-warning text-dark h-100 shadow-sm border-0">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <h6 class="text-uppercase mb-1 opacity-75">Entretiens</h6>
+                                <h2 class="display-6 fw-bold mb-0" th:text="${entretiensEnAttente}">0</h2>
+                            </div>
+                            <i class="bi bi-tools fs-1 opacity-50"></i>
+                        </div>
+                    </div>
+                    <div class="card-footer bg-transparent border-top-0">
+                        <a href="/entretiens" class="text-dark text-decoration-none small stretched-link">
+                            Voir planning <i class="bi bi-chevron-right ms-1"></i>
+                        </a>
+                    </div>
                 </div>
             </div>
-            <div class="col-md-6 mb-4">
-                <div class="h-100 p-5 bg-light border rounded-3">
-                    <h2>Entretiens</h2>
-                    <p class="fs-2 fw-bold" th:text="${nbEntretiens} + ' En Attente'"></p>
-                    <a href="/entretiens" class="btn btn-outline-secondary" type="button">Gérer</a>
-                </div>
-            </div>
-            <div class="col-md-6 mb-4">
-                <div class="h-100 p-5 text-white bg-info rounded-3">
-                    <h2>Paiements</h2>
-                    <p class="fs-2 fw-bold" th:text="${nbPaiements} + ' En Attente'"></p>
-                    <a href="/paiements" class="btn btn-outline-light" type="button">Gérer</a>
+
+            <!-- Paiements du Mois -->
+            <div class="col-xl-3 col-md-6">
+                <div class="card bg-info text-white h-100 shadow-sm border-0">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <h6 class="text-uppercase mb-1 opacity-75">Recettes (Ce mois)</h6>
+                                <h2 class="display-6 fw-bold mb-0" th:text="${paiementsDuMois} + ' DH'">0 DH</h2>
+                            </div>
+                            <i class="bi bi-cash-coin fs-1 opacity-50"></i>
+                        </div>
+                    </div>
+                    <div class="card-footer bg-transparent border-top-0">
+                        <a href="/paiements" class="text-white text-decoration-none small stretched-link">
+                            Détails <i class="bi bi-chevron-right ms-1"></i>
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>
+
+        <!-- Quick Actions Grid -->
+        <h4 class="mb-3 text-secondary">Actions Rapides</h4>
+        <div class="row g-3">
+            <div class="col-md-4">
+                <a href="/reservations/new"
+                    class="card shadow-sm text-decoration-none hover-shadow transition-all border-start border-4 border-primary h-100">
+                    <div class="card-body d-flex align-items-center">
+                        <div class="bg-primary bg-opacity-10 p-3 rounded-circle me-3">
+                            <i class="bi bi-plus-lg text-primary fs-4"></i>
+                        </div>
+                        <div>
+                            <h5 class="card-title mb-1 text-dark">Nouvelle Réservation</h5>
+                            <p class="card-text text-muted small">Créer une réservation pour un client</p>
+                        </div>
+                    </div>
+                </a>
+            </div>
+
+            <div class="col-md-4">
+                <a href="/clients/new"
+                    class="card shadow-sm text-decoration-none hover-shadow transition-all border-start border-4 border-success h-100">
+                    <div class="card-body d-flex align-items-center">
+                        <div class="bg-success bg-opacity-10 p-3 rounded-circle me-3">
+                            <i class="bi bi-person-plus text-success fs-4"></i>
+                        </div>
+                        <div>
+                            <h5 class="card-title mb-1 text-dark">Nouveau Client</h5>
+                            <p class="card-text text-muted small">Enregistrer un nouveau client</p>
+                        </div>
+                    </div>
+                </a>
+            </div>
+
+            <div class="col-md-4">
+                <a href="/calendar"
+                    class="card shadow-sm text-decoration-none hover-shadow transition-all border-start border-4 border-secondary h-100">
+                    <div class="card-body d-flex align-items-center">
+                        <div class="bg-secondary bg-opacity-10 p-3 rounded-circle me-3">
+                            <i class="bi bi-calendar3 text-secondary fs-4"></i>
+                        </div>
+                        <div>
+                            <h5 class="card-title mb-1 text-dark">Voir le Calendrier</h5>
+                            <p class="card-text text-muted small">Disponibilités et retours</p>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </div>
+
+        <!-- CSS for Hover Effect -->
+        <style>
+            .hover-shadow:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 .5rem 1rem rgba(0, 0, 0, .15) !important;
+            }
+
+            .transition-all {
+                transition: all 0.3s ease;
+            }
+        </style>
     </div>
 </body>
 

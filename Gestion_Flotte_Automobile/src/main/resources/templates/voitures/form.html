@@ -15,26 +15,33 @@
                             <label for="immatriculation" class="form-label">Immatriculation</label>
                             <input type="text" class="form-control" id="immatriculation" th:field="*{immatriculation}"
                                 required>
+                            <div class="text-danger" th:if="${#fields.hasErrors('immatriculation')}"
+                                th:errors="*{immatriculation}"></div>
                         </div>
                         <div class="col-md-6 mb-3">
                             <label for="marque" class="form-label">Marque</label>
                             <input type="text" class="form-control" id="marque" th:field="*{marque}" required>
+                            <div class="text-danger" th:if="${#fields.hasErrors('marque')}" th:errors="*{marque}"></div>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-md-6 mb-3">
                             <label for="modele" class="form-label">Modèle</label>
                             <input type="text" class="form-control" id="modele" th:field="*{modele}" required>
+                            <div class="text-danger" th:if="${#fields.hasErrors('modele')}" th:errors="*{modele}"></div>
                         </div>
                         <div class="col-md-6 mb-3">
                             <label for="annee" class="form-label">Année</label>
                             <input type="number" class="form-control" id="annee" th:field="*{annee}" required>
+                            <div class="text-danger" th:if="${#fields.hasErrors('annee')}" th:errors="*{annee}"></div>
                         </div>
                     </div>
                     <div class="mb-3">
                         <label for="kilometrageActuel" class="form-label">Kilométrage Actuel</label>
                         <input type="number" class="form-control" id="kilometrageActuel" th:field="*{kilometrageActuel}"
                             required>
+                        <div class="text-danger" th:if="${#fields.hasErrors('kilometrageActuel')}"
+                            th:errors="*{kilometrageActuel}"></div>
                     </div>
                     <div class="mb-3">
                         <label for="statut" class="form-label">Statut</label>
@@ -44,27 +51,42 @@
                     </div>
                     <div class="row">
                         <div class="col-md-6 mb-3">
-                            <label for="dateMiseEnService" class="form-label">Date Mise en Service</label>
+                            <label for="dateMiseEnService" class="form-label">Date Mise en Service <span
+                                    class="text-danger">*</span></label>
                             <input type="date" class="form-control" id="dateMiseEnService"
                                 th:field="*{dateMiseEnService}">
+                            <div class="text-danger" th:if="${#fields.hasErrors('dateMiseEnService')}"
+                                th:errors="*{dateMiseEnService}"></div>
                         </div>
                         <div class="col-md-6 mb-3">
-                            <label for="dateProchaineVidange" class="form-label">Date Prochaine Vidange</label>
-                            <input type="date" class="form-control" id="dateProchaineVidange"
-                                th:field="*{dateProchaineVidange}">
+                            <label class="form-label">Date Prochaine Vidange</label>
+                            <div class="input-group">
+                                <input type="date" class="form-control" id="dateProchaineVidange"
+                                    th:field="*{dateProchaineVidange}">
+                                <span class="input-group-text">Coût</span>
+                                <input type="number" step="0.01" class="form-control" placeholder="0.0"
+                                    th:field="*{coutVidange}">
+                            </div>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-md-6 mb-3">
-                            <label for="dateProchaineVisiteTechnique" class="form-label">Date Prochaine Visite
-                                Technique</label>
-                            <input type="date" class="form-control" id="dateProchaineVisiteTechnique"
-                                th:field="*{dateProchaineVisiteTechnique}">
+                            <label class="form-label">Date Prochaine Visite Technique</label>
+                            <div class="input-group">
+                                <input type="date" class="form-control" id="dateProchaineVisiteTechnique"
+                                    th:field="*{dateProchaineVisiteTechnique}">
+                                <span class="input-group-text">Coût</span>
+                                <input type="number" step="0.01" class="form-control" placeholder="0.0"
+                                    th:field="*{coutVisiteTechnique}">
+                            </div>
                         </div>
                         <div class="col-md-6 mb-3">
-                            <label for="dateExpirationAssurance" class="form-label">Date Expiration Assurance</label>
+                            <label for="dateExpirationAssurance" class="form-label">Date Expiration Assurance <span
+                                    class="text-danger">*</span></label>
                             <input type="date" class="form-control" id="dateExpirationAssurance"
                                 th:field="*{dateExpirationAssurance}">
+                            <div class="text-danger" th:if="${#fields.hasErrors('dateExpirationAssurance')}"
+                                th:errors="*{dateExpirationAssurance}"></div>
                         </div>
                     </div>
                     <button type="submit" class="btn btn-primary">Enregistrer</button>

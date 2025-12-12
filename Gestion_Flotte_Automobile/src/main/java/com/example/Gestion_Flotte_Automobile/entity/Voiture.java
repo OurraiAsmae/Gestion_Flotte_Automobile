@@ -42,17 +42,33 @@ public class Voiture {
     @Column(nullable = false)
     private double kilometrageActuel;
 
+    @jakarta.validation.constraints.NotNull(message = "La date de mise en service est obligatoire")
     @jakarta.validation.constraints.PastOrPresent(message = "La date de mise en service ne peut pas être dans le futur")
     @Column(nullable = false)
+    @org.springframework.format.annotation.DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate dateMiseEnService;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private StatutVoiture statut;
 
+    @org.springframework.format.annotation.DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate dateProchaineVidange;
+
+    @Transient
+    private Double coutVidange = 0.0;
+
+    @org.springframework.format.annotation.DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate dateProchaineVisiteTechnique;
+
+    @Transient
+    private Double coutVisiteTechnique = 0.0;
+
+    @jakarta.validation.constraints.NotNull(message = "La date d'expiration d'assurance est obligatoire")
+    @org.springframework.format.annotation.DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate dateExpirationAssurance;
+
+    @org.springframework.format.annotation.DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate dateExpirationVignette;
 
     @OneToMany(mappedBy = "voiture", cascade = CascadeType.ALL)

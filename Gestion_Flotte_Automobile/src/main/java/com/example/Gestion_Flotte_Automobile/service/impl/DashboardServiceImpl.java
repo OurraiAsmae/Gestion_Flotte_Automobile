@@ -78,10 +78,9 @@ public class DashboardServiceImpl implements DashboardService {
     @Override
     public double sumPaiementsDuMois() {
         LocalDate startOfMonth = LocalDate.now().withDayOfMonth(1);
-        return paiementRepository.findAll().stream()
-                .filter(p -> p.getDatePaiement().isAfter(startOfMonth.minusDays(1)))
-                .mapToDouble(com.example.Gestion_Flotte_Automobile.entity.Paiement::getMontant)
-                .sum();
+        return paiementRepository.sumMontantByStatutAndDatePaiementGreaterThanEqual(
+                com.example.Gestion_Flotte_Automobile.enums.StatutPaiement.PAYE,
+                startOfMonth);
     }
 
     @Override

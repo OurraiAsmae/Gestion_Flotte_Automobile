@@ -50,6 +50,10 @@ public class ReservationServiceImpl implements ReservationService {
                 "Une nouvelle réservation a été créée pour la voiture " + saved.getVoiture().getImmatriculation(),
                 com.example.Gestion_Flotte_Automobile.enums.TypeNotification.INFORMATION);
 
+        notificationService.envoyerNotificationAuxGerants("Nouvelle Réservation",
+                "Nouvelle réservation (ID: " + saved.getId() + ") pour le client " + saved.getClient().getNom() +
+                        " " + saved.getClient().getPrenom());
+
         return saved;
     }
 
@@ -57,6 +61,27 @@ public class ReservationServiceImpl implements ReservationService {
     @Transactional
     public Reservation update(Long id, Reservation reservation) {
         if (reservationRepository.existsById(id)) {
+            // Check if status is becoming TERMINEE or ANNULEE
+            if (reservation.getStatut() == StatutReservation.TERMINEE
+                    || reservation.getStatut() == StatutReservation.ANNULEE) {
+                // Fetch the actual car to ensure we have the entity
+                Optional<Reservation> existingOpt = reservationRepository.findById(id);
+                if (existingOpt.isPresent()) {
+                    com.example.Gestion_Flotte_Automobile.entity.Voiture voiture = existingOpt.get().getVoiture();
+                    System.out.println(
+                            "Updating car status for reservation " + id + " to DISPONIBLE. Car ID: " + voiture.getId());
+                    voitureService.mettreAJourStatutVoiture(voiture,
+                            com.example.Gestion_Flotte_Automobile.enums.StatutVoiture.DISPONIBLE);
+
+                    // Also update the incoming reservation's voiture to avoid overwriting with
+                    // stale state
+                    if (reservation.getVoiture() != null) {
+                        reservation.getVoiture()
+                                .setStatut(com.example.Gestion_Flotte_Automobile.enums.StatutVoiture.DISPONIBLE);
+                    }
+                }
+            }
+
             reservation.setId(id);
             return reservationRepository.save(reservation);
         }
@@ -125,6 +150,10 @@ public class ReservationServiceImpl implements ReservationService {
             notificationService.envoyerNotification(reservation.getEmploye(), "Réservation Annulée",
                     "La réservation " + id + " a été annulée.",
                     com.example.Gestion_Flotte_Automobile.enums.TypeNotification.ALERTE);
+
+            notificationService.envoyerNotificationAuxGerants("Réservation Annulée",
+                    "La réservation " + id + " pour la voiture " + reservation.getVoiture().getImmatriculation()
+                            + " a été annulée.");
         }
     }
 }

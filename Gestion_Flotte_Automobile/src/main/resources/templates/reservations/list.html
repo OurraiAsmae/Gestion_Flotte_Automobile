@@ -31,10 +31,15 @@
                     <td th:text="${reservation.dateDebut}"></td>
                     <td th:text="${reservation.dateFin}"></td>
                     <td>
-                        <span th:text="${reservation.statut}" class="badge" th:classappend="${reservation.statut.name() == 'CONFIRMEE' ? 'bg-success' : 
-                                  (reservation.statut.name() == 'EN_ATTENTE' ? 'bg-warning' : 
-                                  (reservation.statut.name() == 'TERMINEE' ? 'bg-info' : 'bg-danger'))}">
-                        </span>
+                        <form th:action="@{/reservations/update-status/{id}(id=${reservation.id})}" method="post">
+                            <select name="statut" class="form-select form-select-sm" onchange="this.form.submit()"
+                                th:classappend="${reservation.statut.name() == 'CONFIRMEE' ? 'bg-success text-white' : 
+                                              (reservation.statut.name() == 'EN_ATTENTE' ? 'bg-warning text-dark' : 
+                                              (reservation.statut.name() == 'TERMINEE' ? 'bg-info text-white' : 'bg-danger text-white'))}">
+                                <option th:each="s : ${statuts}" th:value="${s}" th:text="${s}"
+                                    th:selected="${s == reservation.statut}"></option>
+                            </select>
+                        </form>
                     </td>
                     <td>
                         <a th:href="@{/reservations/{id}(id=${reservation.id})}" class="btn btn-sm btn-info"

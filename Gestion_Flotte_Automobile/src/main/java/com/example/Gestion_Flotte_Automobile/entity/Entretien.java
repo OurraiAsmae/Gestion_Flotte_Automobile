@@ -32,6 +32,7 @@ public class Entretien {
 
     @NotNull(message = "La date d'entretien est obligatoire")
     @Column(nullable = false)
+    @org.springframework.format.annotation.DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate dateEntretien;
 
     @Min(value = 0, message = "Le kilométrage doit être positif")

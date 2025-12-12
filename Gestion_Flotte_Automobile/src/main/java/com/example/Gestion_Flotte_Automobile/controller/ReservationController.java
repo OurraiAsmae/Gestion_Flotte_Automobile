@@ -26,7 +26,19 @@ public class ReservationController {
     @GetMapping
     public String listReservations(Model model) {
         model.addAttribute("reservations", reservationService.findAll());
+        model.addAttribute("statuts", StatutReservation.values());
         return "reservations/list";
+    }
+
+    @PostMapping("/update-status/{id}")
+    public String updateReservationStatus(@PathVariable Long id, @RequestParam("statut") StatutReservation statut) {
+        Optional<Reservation> reservationOpt = reservationService.findById(id);
+        if (reservationOpt.isPresent()) {
+            Reservation reservation = reservationOpt.get();
+            reservation.setStatut(statut);
+            reservationService.update(id, reservation);
+        }
+        return "redirect:/reservations";
     }
 
     @GetMapping("/new")

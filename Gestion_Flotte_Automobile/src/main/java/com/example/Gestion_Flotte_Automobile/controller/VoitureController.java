@@ -31,7 +31,12 @@ public class VoitureController {
     }
 
     @PostMapping
-    public String saveVoiture(@ModelAttribute("voiture") Voiture voiture) {
+    public String saveVoiture(@jakarta.validation.Valid @ModelAttribute("voiture") Voiture voiture,
+            org.springframework.validation.BindingResult result, Model model) {
+        if (result.hasErrors()) {
+            model.addAttribute("statuts", StatutVoiture.values());
+            return "voitures/form";
+        }
         voitureService.save(voiture);
         return "redirect:/voitures";
     }
@@ -48,7 +53,13 @@ public class VoitureController {
     }
 
     @PostMapping("/update/{id}")
-    public String updateVoiture(@PathVariable Long id, @ModelAttribute("voiture") Voiture voiture) {
+    public String updateVoiture(@PathVariable Long id,
+            @jakarta.validation.Valid @ModelAttribute("voiture") Voiture voiture,
+            org.springframework.validation.BindingResult result, Model model) {
+        if (result.hasErrors()) {
+            model.addAttribute("statuts", StatutVoiture.values());
+            return "voitures/form";
+        }
         voitureService.update(id, voiture);
         return "redirect:/voitures";
     }

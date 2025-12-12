@@ -19,6 +19,8 @@ public class NotificationScheduler {
     private final NotificationService notificationService;
     private final UserService userService;
 
+    private final com.example.Gestion_Flotte_Automobile.repository.ReservationRepository reservationRepository;
+
     // Run every day at 9 AM
     @Scheduled(cron = "0 0 9 * * ?")
     public void checkExpirations() {
@@ -26,27 +28,12 @@ public class NotificationScheduler {
         LocalDate today = LocalDate.now();
         LocalDate sevenDaysLater = today.plusDays(7);
 
-        // We need a recipient. I'll pick the first admin/manager found or just iterate
-        // all admins.
-        // Since I don't have a getAdmins method, I'll fetch all users and filter by
-        // role if possible,
-        // or just send to the first user for now as a placeholder.
-        // Ideally, we should have a specific user or a system admin.
-        // I will try to find a user with role GERANT.
-        com.example.Gestion_Flotte_Automobile.entity.User admin = userService.findAll().stream()
-                .filter(u -> u.getRole() == com.example.Gestion_Flotte_Automobile.enums.Role.GERANT)
-                .findFirst()
-                .orElse(null);
-
-        if (admin == null)
-            return; // No admin to notify
-
         for (Voiture voiture : voitures) {
             // Check Assurance
             if (voiture.getDateExpirationAssurance() != null &&
                     !voiture.getDateExpirationAssurance().isBefore(today) &&
                     voiture.getDateExpirationAssurance().isBefore(sevenDaysLater)) {
-                notificationService.envoyerNotification(admin, "Expiration Assurance",
+                notificationService.envoyerNotificationAuxGerants("Expiration Assurance",
                         "L'assurance de la voiture " + voiture.getImmatriculation() + " expire bientôt ("
                                 + voiture.getDateExpirationAssurance() + ").");
             }
@@ -55,9 +42,31 @@ public class NotificationScheduler {
             if (voiture.getDateExpirationVignette() != null &&
                     !voiture.getDateExpirationVignette().isBefore(today) &&
                     voiture.getDateExpirationVignette().isBefore(sevenDaysLater)) {
-                notificationService.envoyerNotification(admin, "Expiration Vignette",
+                notificationService.envoyerNotificationAuxGerants("Expiration Vignette",
                         "La vignette de la voiture " + voiture.getImmatriculation() + " expire bientôt ("
                                 + voiture.getDateExpirationVignette() + ").");
+            }
+        }
+
+        checkUpcomingReturns(today);
+    }
+
+    private void checkUpcomingReturns(LocalDate today) {
+        LocalDate tomorrow = today.plusDays(1);
+        // We will fetch all active reservations and check those ending tomorrow
+        // Optimized: We could add a custom query in repository, but for now we filter
+        // in memory or fetch all.
+        // Let's use findAll for simplicity as per instructions to not add new queries
+        // unless necessary,
+        // BUT the user asked for efficiency. ReservationRepository has findByStatut.
+        List<com.example.Gestion_Flotte_Automobile.entity.Reservation> reservations = reservationRepository
+                .findByStatut(com.example.Gestion_Flotte_Automobile.enums.StatutReservation.CONFIRMEE);
+
+        for (com.example.Gestion_Flotte_Automobile.entity.Reservation res : reservations) {
+            if (res.getDateFin().toLocalDate().isEqual(tomorrow)) {
+                notificationService.envoyerNotificationAuxGerants("Retour Prévu Demain",
+                        "La voiture " + res.getVoiture().getImmatriculation() + " doit être retournée demain par "
+                                + res.getClient().getNom());
             }
         }
     }

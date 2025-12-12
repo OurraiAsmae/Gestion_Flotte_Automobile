@@ -30,7 +30,9 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable()) // Temporarily disabled as per requirements
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/css/**", "/js/**", "/images/**", "/webjars/**").permitAll()
-                        .requestMatchers("/", "/home", "/login", "/access-denied").permitAll()
+                        .requestMatchers("/", "/home", "/login", "/access-denied", "/forgot-password",
+                                "/reset-password")
+                        .permitAll()
                         .requestMatchers("/users/**", "/dashboard/**").hasRole("GERANT")
                         .requestMatchers("/voitures/**", "/clients/**", "/reservations/**", "/entretiens/**",
                                 "/paiements/**")

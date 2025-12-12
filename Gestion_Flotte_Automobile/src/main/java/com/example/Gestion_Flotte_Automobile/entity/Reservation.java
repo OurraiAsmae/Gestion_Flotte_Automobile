@@ -37,10 +37,12 @@ public class Reservation {
 
     @NotNull(message = "La date de début est obligatoire")
     @Column(nullable = false)
+    @org.springframework.format.annotation.DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
     private LocalDateTime dateDebut;
 
     @NotNull(message = "La date de fin est obligatoire")
     @Column(nullable = false)
+    @org.springframework.format.annotation.DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
     private LocalDateTime dateFin;
 
     private String motif;

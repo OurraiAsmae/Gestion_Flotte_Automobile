@@ -54,6 +54,10 @@ public class PaiementServiceImpl implements PaiementService {
                     com.example.Gestion_Flotte_Automobile.enums.TypeNotification.CONFIRMATION);
         }
 
+        notificationService.envoyerNotificationAuxGerants("Paiement Reçu",
+                "Un paiement de " + saved.getMontant() + " MAD a été enregistré pour la réservation #"
+                        + saved.getReservation().getId());
+
         return saved;
     }
 
