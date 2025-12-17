@@ -24,6 +24,7 @@ public class VoitureController {
     }
 
     @GetMapping("/new")
+    @org.springframework.security.access.prepost.PreAuthorize("hasRole('GERANT')")
     public String showCreateForm(Model model) {
         model.addAttribute("voiture", new Voiture());
         model.addAttribute("statuts", StatutVoiture.values());
@@ -31,6 +32,7 @@ public class VoitureController {
     }
 
     @PostMapping
+    @org.springframework.security.access.prepost.PreAuthorize("hasRole('GERANT')")
     public String saveVoiture(@jakarta.validation.Valid @ModelAttribute("voiture") Voiture voiture,
             org.springframework.validation.BindingResult result, Model model) {
         if (result.hasErrors()) {
@@ -65,6 +67,7 @@ public class VoitureController {
     }
 
     @GetMapping("/delete/{id}")
+    @org.springframework.security.access.prepost.PreAuthorize("hasRole('GERANT')")
     public String deleteVoiture(@PathVariable Long id) {
         voitureService.deleteById(id);
         return "redirect:/voitures";

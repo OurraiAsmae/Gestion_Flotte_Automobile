@@ -22,4 +22,6 @@ public interface PaiementService {
     List<Paiement> findByVoiture(Long voitureId);
 
     List<Paiement> findByStatut(StatutPaiement statut);
+
+    List<Paiement> findByEmploye(Long employeId);
 }

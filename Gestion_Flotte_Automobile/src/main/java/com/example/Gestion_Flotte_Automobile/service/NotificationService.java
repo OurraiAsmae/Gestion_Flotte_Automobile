@@ -27,4 +27,6 @@ public interface NotificationService {
                         String message, com.example.Gestion_Flotte_Automobile.enums.TypeNotification type);
 
         void envoyerNotificationAuxGerants(String titre, String message);
+
+        void envoyerNotificationAuxEmployes(String titre, String message);
 }

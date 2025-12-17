@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html th:replace="layout/layout :: layout(~{::content})">
+<html th:replace="~{layout/layout :: layout(~{::content})}">
 
 <body th:remove="tag">
     <div th:fragment="content">
@@ -11,16 +11,10 @@
                     <div class="btn-group me-2">
 
                         <div class="btn-group">
-                            <button type="button" class="btn btn-sm btn-outline-secondary dropdown-toggle"
-                                data-bs-toggle="dropdown" aria-expanded="false">
+                            <button type="button" class="btn btn-sm btn-outline-secondary" data-bs-toggle="modal"
+                                data-bs-target="#exportModal">
                                 <i class="bi bi-download"></i> Exporter
                             </button>
-                            <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" th:href="@{/reports/export/pdf}"><i
-                                            class="bi bi-file-pdf me-2 text-danger"></i>Rapport PDF</a></li>
-                                <li><a class="dropdown-item" th:href="@{/reports/export/excel}"><i
-                                            class="bi bi-file-excel me-2 text-success"></i>Rapport Excel</a></li>
-                            </ul>
                         </div>
                     </div>
                 </div>
@@ -91,6 +85,46 @@
                 </div>
             </div>
 
+            <!-- Section Suivi Financier -->
+            <h4 class="mb-3 text-secondary">Suivi Financier</h4>
+            <div class="row g-4 mb-4">
+                <div class="col-md-6">
+                    <div class="card border-0 shadow-sm border-start border-4 border-danger h-100">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center justify-content-between">
+                                <div>
+                                    <h6 class="text-secondary text-uppercase mb-1">Dépenses Totales (Entretiens &
+                                        Assurance)</h6>
+                                    <h3 class="fs-2 fw-bold text-danger mb-0" th:text="${totalEntretienPaye} + ' DH'">0
+                                        DH</h3>
+                                    <small class="text-muted">Cumul des entretiens et charges payés</small>
+                                </div>
+                                <div class="bg-danger bg-opacity-10 p-3 rounded-circle">
+                                    <i class="bi bi-graph-down-arrow text-danger fs-3"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="card border-0 shadow-sm border-start border-4 border-success h-100">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center justify-content-between">
+                                <div>
+                                    <h6 class="text-secondary text-uppercase mb-1">Bénéfice Net (Global)</h6>
+                                    <h3 class="fs-2 fw-bold text-success mb-0" th:text="${beneficeNet} + ' DH'">0
+                                        DH</h3>
+                                    <small class="text-muted">Total Recettes - Total Dépenses</small>
+                                </div>
+                                <div class="bg-success bg-opacity-10 p-3 rounded-circle">
+                                    <i class="bi bi-graph-up-arrow text-success fs-3"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <h3 class="mb-4"><i class="bi bi-lightning-charge me-2"></i>Actions Rapides</h3>
             <div class="row g-4">
                 <div class="col-md-6">
@@ -129,6 +163,52 @@
                 </div>
             </div>
         </div>
+        <!-- Export Modal -->
+        <div class="modal fade" id="exportModal" tabindex="-1" aria-labelledby="exportModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <form action="/reports/export" method="get">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exportModalLabel">Exporter un Rapport</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="mb-3">
+                                <label for="reportType" class="form-label">Type de Rapport</label>
+                                <select class="form-select" id="reportType" name="type" required>
+                                    <option value="FINANCIAL">Rapport Financier (Dépenses/Recettes)</option>
+                                    <option value="RESERVATIONS">Liste des Réservations</option>
+                                    <option value="VOITURES">Liste des Voitures</option>
+                                    <option value="ENTRETIENS">Liste des Entretiens</option>
+                                </select>
+                            </div>
+                            <div class="row g-3 mb-3">
+                                <div class="col-6">
+                                    <label for="startDate" class="form-label">Date Début</label>
+                                    <input type="date" class="form-control" id="startDate" name="startDate">
+                                </div>
+                                <div class="col-6">
+                                    <label for="endDate" class="form-label">Date Fin</label>
+                                    <input type="date" class="form-control" id="endDate" name="endDate">
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="format" class="form-label">Format</label>
+                                <select class="form-select" id="format" name="format" required>
+                                    <option value="CSV">CSV (Excel)</option>
+                                    <option value="PDF">PDF</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+                            <button type="submit" class="btn btn-primary">Télécharger</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <!-- End Fragment Content -->
     </div>
 </body>
 

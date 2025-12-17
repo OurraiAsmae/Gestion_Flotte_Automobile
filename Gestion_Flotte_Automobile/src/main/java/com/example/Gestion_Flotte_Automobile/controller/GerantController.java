@@ -20,6 +20,13 @@ public class GerantController {
         model.addAttribute("reservationsEnCours", dashboardService.countReservationsEnCours());
         model.addAttribute("entretiensEnAttente", dashboardService.countEntretiensEnAttente());
         model.addAttribute("paiementsDuMois", dashboardService.sumPaiementsDuMois());
+
+        double totalDepenses = dashboardService.sumCoutEntretiensPayes();
+        double totalRevenus = dashboardService.sumTotalPaiements();
+        double beneficeNet = totalRevenus - totalDepenses;
+
+        model.addAttribute("totalEntretienPaye", totalDepenses);
+        model.addAttribute("beneficeNet", beneficeNet);
         return "gerant/home";
     }
 }

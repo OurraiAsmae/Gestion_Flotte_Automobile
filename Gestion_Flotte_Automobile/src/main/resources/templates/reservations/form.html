@@ -55,6 +55,13 @@
                         </select>
                     </div>
 
+                    <div class="mb-3" th:if="${reservation.id == null}">
+                        <label for="typePaiement" class="form-label">Type de Paiement (Initial)</label>
+                        <select class="form-select" id="typePaiement" th:field="*{typePaiement}">
+                            <option th:each="t : ${typesPaiement}" th:value="${t}" th:text="${t}"></option>
+                        </select>
+                    </div>
+
                     <!-- Employee field for admin/gerant -->
                     <div class="mb-3" th:if="${employes != null}">
                         <label for="employe" class="form-label">Employé responsable</label>

@@ -15,15 +15,22 @@
                     <div class="row">
                         <div class="col-md-6 mb-3">
                             <label for="voiture" class="form-label">Voiture</label>
-                            <select class="form-select" id="voiture" th:field="*{voiture}" required>
+                            <!-- If Disabled, we must provide a hidden input to send the ID, or handle null in controller. 
+                                 However, standard HTML disabled selects don't send value. 
+                                 If we rely on Controller "Fetch and Merge", we don't strictly need the value if we don't use it.
+                                 But for "New", it must be enabled. -->
+                            <select class="form-select" id="voiture" th:field="*{voiture}" required
+                                th:disabled="${entretien.id != null and not #authorization.expression('hasRole(''GERANT'')')}">
                                 <option value="">-- Sélectionner une voiture --</option>
                                 <option th:each="v : ${voitures}" th:value="${v.id}"
-                                    th:text="${v.marque + ' ' + v.modele + ' (' + v.immatriculation + ')'}"></option>
+                                    th:text="${v.marque + ' ' + v.modele + ' (' + v.immatriculation + ')'}"
+                                    th:selected="${v.id == selectedVoitureId}"></option>
                             </select>
                         </div>
                         <div class="col-md-6 mb-3">
                             <label for="typeEntretien" class="form-label">Type d'entretien</label>
-                            <select class="form-select" id="typeEntretien" th:field="*{typeEntretien}">
+                            <select class="form-select" id="typeEntretien" th:field="*{typeEntretien}"
+                                th:disabled="${entretien.id != null and not #authorization.expression('hasRole(''GERANT'')')}">
                                 <option th:each="t : ${types}" th:value="${t}" th:text="${t}"></option>
                             </select>
                         </div>
@@ -32,23 +39,37 @@
                         <div class="col-md-6 mb-3">
                             <label for="dateEntretien" class="form-label">Date</label>
                             <input type="date" class="form-control" id="dateEntretien" th:field="*{dateEntretien}"
-                                required>
+                                required
+                                th:readonly="${entretien.id != null and not #authorization.expression('hasRole(''GERANT'')')}">
                         </div>
-                        <div class="col-md-6 mb-3">
-                            <label for="cout" class="form-label">Coût (MAD)</label>
-                            <input type="number" step="0.01" class="form-control" id="cout" th:field="*{cout}" required>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="cout" class="form-label">Coût (MAD)</label>
+                                <input type="number" step="0.01" class="form-control" id="cout" th:field="*{cout}"
+                                    required
+                                    th:readonly="${entretien.id != null and not #authorization.expression('hasRole(''GERANT'')')}">
+                            </div>
+                            <div class="col-md-6 mb-3 d-flex align-items-end">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="paye" th:field="*{paye}">
+                                    <label class="form-check-label" for="paye">
+                                        Déjà Payé ?
+                                    </label>
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                    <div class="mb-3">
-                        <label for="prestataire" class="form-label">Prestataire</label>
-                        <input type="text" class="form-control" id="prestataire" th:field="*{prestataire}">
-                    </div>
-                    <div class="mb-3">
-                        <label for="commentaires" class="form-label">Commentaires</label>
-                        <textarea class="form-control" id="commentaires" th:field="*{commentaires}" rows="3"></textarea>
-                    </div>
-                    <button type="submit" class="btn btn-primary">Enregistrer</button>
-                    <a th:href="@{/entretiens}" class="btn btn-secondary">Annuler</a>
+                        <div class="mb-3">
+                            <label for="prestataire" class="form-label">Prestataire</label>
+                            <input type="text" class="form-control" id="prestataire" th:field="*{prestataire}"
+                                th:readonly="${entretien.id != null and not #authorization.expression('hasRole(''GERANT'')')}">
+                        </div>
+                        <div class="mb-3">
+                            <label for="commentaires" class="form-label">Commentaires</label>
+                            <textarea class="form-control" id="commentaires" th:field="*{commentaires}" rows="3"
+                                th:readonly="${entretien.id != null and not #authorization.expression('hasRole(''GERANT'')')}"></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Enregistrer</button>
+                        <a th:href="@{/entretiens}" class="btn btn-secondary">Annuler</a>
                 </form>
             </div>
         </div>

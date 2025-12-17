@@ -19,4 +19,6 @@ public interface EntretienService {
     List<Entretien> findByVoiture(Long voitureId);
 
     void terminerEntretien(Long id);
+
+    List<Entretien> findByDateEntretienBetween(java.time.LocalDate startDate, java.time.LocalDate endDate);
 }

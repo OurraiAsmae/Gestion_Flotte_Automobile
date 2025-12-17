@@ -9,11 +9,6 @@ public class HomeController {
 
     private final com.example.Gestion_Flotte_Automobile.service.DashboardService dashboardService;
 
-    @GetMapping("/")
-    public String root() {
-        return "redirect:/home";
-    }
-
     @GetMapping("/home")
     public String home(org.springframework.ui.Model model) {
         model.addAttribute("voituresDisponibles", dashboardService.countVoituresDisponibles());
@@ -21,6 +16,13 @@ public class HomeController {
         model.addAttribute("entretiensEnAttente", dashboardService.countEntretiensEnAttente());
         model.addAttribute("clients", dashboardService.countClients());
         model.addAttribute("paiementsDuMois", dashboardService.sumPaiementsDuMois());
+
+        double totalDepenses = dashboardService.sumCoutEntretiensPayes();
+        double totalRevenus = dashboardService.sumTotalPaiements();
+        double beneficeNet = totalRevenus - totalDepenses;
+
+        model.addAttribute("totalEntretienPaye", totalDepenses);
+        model.addAttribute("beneficeNet", beneficeNet);
         return "home";
     }
 }

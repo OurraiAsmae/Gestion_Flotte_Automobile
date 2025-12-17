@@ -41,6 +41,8 @@
             </div>
             <div class="card-footer">
                 <a th:href="@{/voitures/edit/{id}(id=${voiture.id})}" class="btn btn-warning">Modifier</a>
+                <a th:href="@{/entretiens/new(voitureId=${voiture.id})}" class="btn btn-success ms-2">Ajouter un
+                    entretien</a>
             </div>
         </div>
 

@@ -9,4 +9,6 @@ import java.util.List;
 @Repository
 public interface EntretienRepository extends JpaRepository<Entretien, Long> {
     List<Entretien> findByVoitureId(Long voitureId);
+
+    List<Entretien> findByDateEntretienBetween(java.time.LocalDate startDate, java.time.LocalDate endDate);
 }

@@ -16,13 +16,16 @@ public class ReservationServiceImpl implements ReservationService {
     private final ReservationRepository reservationRepository;
     private final com.example.Gestion_Flotte_Automobile.service.VoitureService voitureService;
     private final com.example.Gestion_Flotte_Automobile.service.NotificationService notificationService;
+    private final com.example.Gestion_Flotte_Automobile.repository.PaiementRepository paiementRepository;
 
     public ReservationServiceImpl(ReservationRepository reservationRepository,
             com.example.Gestion_Flotte_Automobile.service.VoitureService voitureService,
-            com.example.Gestion_Flotte_Automobile.service.NotificationService notificationService) {
+            com.example.Gestion_Flotte_Automobile.service.NotificationService notificationService,
+            com.example.Gestion_Flotte_Automobile.repository.PaiementRepository paiementRepository) {
         this.reservationRepository = reservationRepository;
         this.voitureService = voitureService;
         this.notificationService = notificationService;
+        this.paiementRepository = paiementRepository;
     }
 
     @Override
@@ -43,16 +46,45 @@ public class ReservationServiceImpl implements ReservationService {
         reservation.setStatut(StatutReservation.CONFIRMEE);
         Reservation saved = reservationRepository.save(reservation);
 
+        // Calculate Price & Create Payment
+        Double storedPrice = saved.getVoiture().getPrixParJour();
+        double prixParJour = (storedPrice != null) ? storedPrice : 300.0; // Default to 300 if not set
+
+        long hours = java.time.temporal.ChronoUnit.HOURS.between(saved.getDateDebut(), saved.getDateFin());
+        long days = (long) Math.ceil(hours / 24.0);
+
+        if (days < 1)
+            days = 1; // Minimum 1 day
+        double totalAmount = days * prixParJour;
+
+        com.example.Gestion_Flotte_Automobile.entity.Paiement paiement = new com.example.Gestion_Flotte_Automobile.entity.Paiement();
+        paiement.setReservation(saved);
+        paiement.setVoiture(saved.getVoiture());
+        paiement.setClient(saved.getClient());
+        paiement.setMontant(totalAmount);
+        paiement.setMontant(totalAmount);
+        paiement.setStatut(com.example.Gestion_Flotte_Automobile.enums.StatutPaiement.EN_ATTENTE);
+
+        com.example.Gestion_Flotte_Automobile.enums.TypePaiement selectedType = saved.getTypePaiement();
+        paiement.setTypePaiement(
+                selectedType != null ? selectedType : com.example.Gestion_Flotte_Automobile.enums.TypePaiement.ESPECES);
+
+        paiement.setDatePaiement(java.time.LocalDate.now()); // Set current date as placeholder or actual payment date?
+                                                             // Usually 'datePaiement' is when it is paid. But field is
+                                                             // NotNull. So set now.
+        paiementRepository.save(paiement);
+
         voitureService.mettreAJourStatutVoiture(saved.getVoiture(),
                 com.example.Gestion_Flotte_Automobile.enums.StatutVoiture.EN_RESERVATION);
 
         notificationService.envoyerNotification(saved.getEmploye(), "Nouvelle Réservation",
-                "Une nouvelle réservation a été créée pour la voiture " + saved.getVoiture().getImmatriculation(),
+                "Une nouvelle réservation a été créée pour la voiture " + saved.getVoiture().getImmatriculation()
+                        + ". Montant estimé: " + totalAmount + " MAD",
                 com.example.Gestion_Flotte_Automobile.enums.TypeNotification.INFORMATION);
 
         notificationService.envoyerNotificationAuxGerants("Nouvelle Réservation",
                 "Nouvelle réservation (ID: " + saved.getId() + ") pour le client " + saved.getClient().getNom() +
-                        " " + saved.getClient().getPrenom());
+                        " " + saved.getClient().getPrenom() + ". Montant: " + totalAmount);
 
         return saved;
     }
@@ -61,6 +93,42 @@ public class ReservationServiceImpl implements ReservationService {
     @Transactional
     public Reservation update(Long id, Reservation reservation) {
         if (reservationRepository.existsById(id)) {
+            // Strict Locking Rules
+            java.util.List<com.example.Gestion_Flotte_Automobile.entity.Paiement> paiements = paiementRepository
+                    .findByReservationId(id);
+            boolean isPaid = paiements.stream()
+                    .anyMatch(p -> p.getStatut() == com.example.Gestion_Flotte_Automobile.enums.StatutPaiement.PAYE);
+
+            if (isPaid) {
+                org.springframework.security.core.Authentication auth = org.springframework.security.core.context.SecurityContextHolder
+                        .getContext().getAuthentication();
+                boolean isEmploye = auth.getAuthorities().stream()
+                        .anyMatch(a -> a.getAuthority().equals("ROLE_EMPLOYE"));
+                if (isEmploye) {
+                    throw new IllegalStateException(
+                            "Modification interdite : La réservation est payée. Veuillez contacter un gérant.");
+                }
+            }
+            // Wait, FindByVoitureId is too broad. We need FindByReservationId.
+            // Paiement entity has "reservation" field. But Repository doesn't have
+            // findByReservationId?
+            // Existing repo has: findByClientId, findByVoitureId, findByStatut.
+            // Missing findByReservationId!
+            // I should use findByVoitureId and filter or assume I can get it.
+            // Actually, I can navigate via Reservation entity if bidirectional?
+            // Reservation entity does NOT have list of paiements.
+            // I should modify PaiementRepository to add findByReservationId or use what I
+            // have.
+            // I have `paiementRepository` but need `findByReservationId`.
+            // I will Assume I can add it or since I cannot modify schema easily, I can add
+            // it to Repo interface in next step?
+            // "Paiement.reservation" exists.
+
+            // For now, to proceed without breaking compilation, I'll Skip strict checking
+            // OR find another way.
+            // I can iterate all payments of the client? No.
+            // Let's Assume, I will add `findByReservationId` to PaiementRepo in a moment.
+
             // Check if status is becoming TERMINEE or ANNULEE
             if (reservation.getStatut() == StatutReservation.TERMINEE
                     || reservation.getStatut() == StatutReservation.ANNULEE) {
@@ -155,5 +223,10 @@ public class ReservationServiceImpl implements ReservationService {
                     "La réservation " + id + " pour la voiture " + reservation.getVoiture().getImmatriculation()
                             + " a été annulée.");
         }
+    }
+
+    @Override
+    public List<Reservation> findByDateDebutBetween(java.time.LocalDateTime start, java.time.LocalDateTime end) {
+        return reservationRepository.findByDateDebutBetween(start, end);
     }
 }

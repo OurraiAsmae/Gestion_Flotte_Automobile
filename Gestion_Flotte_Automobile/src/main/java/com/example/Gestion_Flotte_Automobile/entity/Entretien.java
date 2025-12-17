@@ -47,4 +47,7 @@ public class Entretien {
 
     @Column(columnDefinition = "TEXT")
     private String commentaires;
+
+    @Column(nullable = false)
+    private boolean paye = false;
 }

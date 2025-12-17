@@ -3,50 +3,65 @@
 
 <body th:remove="tag">
     <div th:fragment="content">
-        <div class="d-flex justify-content-between align-items-center mb-3">
-            <h2>Gestion des Paiements</h2>
-            <a th:href="@{/paiements/new}" class="btn btn-primary"><i class="bi bi-plus-circle"></i> Nouveau
-                paiement</a>
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2 class="text-primary fw-bold"><i class="bi bi-cash-stack me-2"></i>Gestion des Paiements</h2>
+            <a th:href="@{/paiements/new}" class="btn btn-primary-custom shadow-sm">
+                <i class="bi bi-plus-circle me-2"></i>Nouveau paiement
+            </a>
         </div>
 
-        <table class="table table-striped table-hover">
-            <thead class="table-dark">
-                <tr>
-                    <th>ID</th>
-                    <th>Client</th>
-                    <th>Voiture</th>
-                    <th>Montant</th>
-                    <th>Date</th>
-                    <th>Type</th>
-                    <th>Statut</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr th:each="paiement : ${paiements}">
-                    <td th:text="${paiement.id}"></td>
-                    <td th:text="${paiement.client.prenom + ' ' + paiement.client.nom}"></td>
-                    <td th:text="${paiement.voiture.marque + ' ' + paiement.voiture.modele}"></td>
-                    <td th:text="${paiement.montant + ' MAD'}"></td>
-                    <td th:text="${paiement.datePaiement}"></td>
-                    <td th:text="${paiement.typePaiement}"></td>
-                    <td>
-                        <form th:action="@{/paiements/update/{id}(id=${paiement.id})}" method="post">
-                            <select name="statut" class="form-select form-select-sm" onchange="this.form.submit()"
-                                style="width: auto; min-width: 130px;"
-                                th:classappend="${paiement.statut.name() == 'PAYE' ? 'text-success border-success' : 
-                                                    (paiement.statut.name() == 'EN_ATTENTE' ? 'text-warning border-warning' : '')}">
-                                <option th:each="s : ${statuts}" th:value="${s}" th:text="${s.name() == 'EN_ATTENTE' ? 'En attente' : 
-                                                  (s.name() == 'PAYE' ? 'Payé' : 
-                                                  (s.name() == 'ANNULE' ? 'Annulé' : 
-                                                  (s.name() == 'ECHEC' ? 'Échec' : s.name())))}"
-                                    th:selected="${s == paiement.statut}">
-                                </option>
-                            </select>
-                        </form>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
+        <div class="card shadow-custom border-0 rounded-custom overflow-hidden">
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle mb-0">
+                        <thead class="bg-light text-secondary">
+                            <tr>
+                                <th class="ps-4 py-3">ID</th>
+                                <th class="py-3">Client</th>
+                                <th class="py-3">Véhicule</th>
+                                <th class="py-3">Montant</th>
+                                <th class="py-3">Date</th>
+                                <th class="py-3">Statut</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="paiement : ${paiements}" class="border-bottom">
+                                <td class="ps-4 py-3 fw-bold text-secondary" th:text="'#' + ${paiement.id}"></td>
+                                <td class="py-3">
+                                    <div class="d-flex align-items-center">
+                                        <div class="avatar-circle me-3 bg-success bg-opacity-10 text-success d-flex align-items-center justify-content-center"
+                                            style="width: 35px; height: 35px; border-radius: 50%;">
+                                            <i class="bi bi-person"></i>
+                                        </div>
+                                        <span th:text="${paiement.client.prenom + ' ' + paiement.client.nom}"></span>
+                                    </div>
+                                </td>
+                                <td class="py-3" th:text="${paiement.voiture.marque + ' ' + paiement.voiture.modele}">
+                                </td>
+                                <td class="py-3 fw-bold text-dark" th:text="${paiement.montant + ' MAD'}"></td>
+                                <td class="py-3" th:text="${paiement.datePaiement}"></td>
+                                <td class="py-3">
+                                    <form th:action="@{/paiements/update/{id}(id=${paiement.id})}" method="post">
+                                        <select name="statut" class="form-select form-select-sm border-0 shadow-sm"
+                                            onchange="this.form.submit()"
+                                            style="width: auto; min-width: 130px; font-weight: 500;"
+                                            th:classappend="${paiement.statut.name() == 'PAYE' ? 'bg-success bg-opacity-10 text-success' : 
+                                                            (paiement.statut.name() == 'EN_ATTENTE' ? 'bg-warning bg-opacity-10 text-warning' : 'bg-danger bg-opacity-10 text-danger')}">
+                                            <option th:each="s : ${statuts}" th:value="${s}" th:text="${s.name() == 'EN_ATTENTE' ? 'En attente' : 
+                                                              (s.name() == 'PAYE' ? 'Payé' : 
+                                                              (s.name() == 'ANNULE' ? 'Annulé' : 
+                                                              (s.name() == 'ECHEC' ? 'Échec' : s.name())))}"
+                                                th:selected="${s == paiement.statut}">
+                                            </option>
+                                        </select>
+                                    </form>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
     </div>
 </body>
 

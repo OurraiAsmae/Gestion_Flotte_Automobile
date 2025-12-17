@@ -20,10 +20,27 @@ public class PaiementController {
     private final ClientService clientService;
     private final VoitureService voitureService;
     private final com.example.Gestion_Flotte_Automobile.service.ReservationService reservationService;
+    private final com.example.Gestion_Flotte_Automobile.repository.UserRepository userRepository;
 
     @GetMapping
     public String listPaiements(Model model) {
-        model.addAttribute("paiements", paiementService.findAll());
+        org.springframework.security.core.Authentication auth = org.springframework.security.core.context.SecurityContextHolder
+                .getContext().getAuthentication();
+        boolean isEmploye = auth.getAuthorities().stream()
+                .anyMatch(a -> a.getAuthority().equals("ROLE_EMPLOYE"));
+
+        if (isEmploye) {
+            String email = auth.getName();
+            com.example.Gestion_Flotte_Automobile.entity.User user = userRepository.findByEmail(email);
+            if (user != null) {
+                model.addAttribute("paiements", paiementService.findByEmploye(user.getId()));
+            } else {
+                model.addAttribute("paiements", java.util.Collections.emptyList());
+            }
+        } else {
+            model.addAttribute("paiements", paiementService.findAll());
+        }
+
         model.addAttribute("statuts", StatutPaiement.values());
         return "paiements/list";
     }

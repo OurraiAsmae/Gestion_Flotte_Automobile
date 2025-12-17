@@ -87,4 +87,42 @@ public class DashboardServiceImpl implements DashboardService {
     public long countEntretiensEnAttente() {
         return entretienRepository.count();
     }
+
+    @Override
+    public double sumCoutEntretiensPayes() {
+        return entretienRepository.findAll().stream()
+                .filter(com.example.Gestion_Flotte_Automobile.entity.Entretien::isPaye)
+                .mapToDouble(com.example.Gestion_Flotte_Automobile.entity.Entretien::getCout)
+                .sum();
+    }
+
+    @Override
+    public double sumTotalPaiements() {
+        return paiementRepository.findAll().stream()
+                .filter(p -> p.getStatut() == com.example.Gestion_Flotte_Automobile.enums.StatutPaiement.PAYE)
+                .mapToDouble(com.example.Gestion_Flotte_Automobile.entity.Paiement::getMontant)
+                .sum();
+    }
+
+    @Override
+    public double sumCoutEntretiensPayes(java.time.LocalDate startDate, java.time.LocalDate endDate) {
+        if (startDate == null || endDate == null) {
+            return sumCoutEntretiensPayes();
+        }
+        return entretienRepository.findByDateEntretienBetween(startDate, endDate).stream()
+                .filter(com.example.Gestion_Flotte_Automobile.entity.Entretien::isPaye)
+                .mapToDouble(com.example.Gestion_Flotte_Automobile.entity.Entretien::getCout)
+                .sum();
+    }
+
+    @Override
+    public double sumTotalPaiements(java.time.LocalDate startDate, java.time.LocalDate endDate) {
+        if (startDate == null || endDate == null) {
+            return sumTotalPaiements();
+        }
+        return paiementRepository.sumMontantByStatutAndDatePaiementBetween(
+                com.example.Gestion_Flotte_Automobile.enums.StatutPaiement.PAYE,
+                startDate,
+                endDate);
+    }
 }

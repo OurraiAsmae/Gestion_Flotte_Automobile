@@ -24,10 +24,13 @@ public class EntretienController {
     }
 
     @GetMapping("/new")
-    public String showCreateForm(Model model) {
+    public String showCreateForm(@RequestParam(required = false) Long voitureId, Model model) {
         model.addAttribute("entretien", new Entretien());
         model.addAttribute("voitures", voitureService.findAll());
         model.addAttribute("types", TypeEntretien.values());
+        if (voitureId != null) {
+            model.addAttribute("selectedVoitureId", voitureId);
+        }
         return "entretiens/form";
     }
 
@@ -60,7 +63,25 @@ public class EntretienController {
     public String updateEntretien(@PathVariable Long id, @ModelAttribute("entretien") Entretien entretien,
             Model model) {
         try {
-            entretienService.update(id, entretien);
+            org.springframework.security.core.Authentication auth = org.springframework.security.core.context.SecurityContextHolder
+                    .getContext().getAuthentication();
+            boolean isGerant = auth.getAuthorities().stream()
+                    .anyMatch(a -> a.getAuthority().equals("ROLE_GERANT"));
+
+            if (!isGerant) {
+                // For Employees: Only update 'paye' status.
+                java.util.Optional<Entretien> existingOpt = entretienService.findById(id);
+                if (existingOpt.isPresent()) {
+                    Entretien existing = existingOpt.get();
+                    existing.setPaye(entretien.isPaye());
+                    // Preserve other fields (redundant if using ORM save on attached entity but
+                    // good for safety)
+                    entretienService.save(existing);
+                }
+            } else {
+                // For Gerant: Update all
+                entretienService.update(id, entretien);
+            }
             return "redirect:/entretiens";
         } catch (Exception e) {
             model.addAttribute("error", "Erreur lors de la modification : " + e.getMessage());
@@ -71,6 +92,7 @@ public class EntretienController {
     }
 
     @GetMapping("/delete/{id}")
+    @org.springframework.security.access.prepost.PreAuthorize("hasRole('GERANT')")
     public String deleteEntretien(@PathVariable Long id) {
         entretienService.deleteById(id);
         return "redirect:/entretiens";

@@ -16,4 +16,12 @@ public interface DashboardService {
     double sumPaiementsDuMois();
 
     long countEntretiensEnAttente();
+
+    double sumCoutEntretiensPayes();
+
+    double sumTotalPaiements();
+
+    double sumCoutEntretiensPayes(java.time.LocalDate startDate, java.time.LocalDate endDate);
+
+    double sumTotalPaiements(java.time.LocalDate startDate, java.time.LocalDate endDate);
 }

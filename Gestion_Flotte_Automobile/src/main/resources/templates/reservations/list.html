@@ -3,56 +3,88 @@
 
 <body th:remove="tag">
     <div th:fragment="content">
-        <div class="d-flex justify-content-between align-items-center mb-3">
-            <h2>Gestion des Réservations</h2>
-            <a th:href="@{/reservations/new}" class="btn btn-primary"><i class="bi bi-plus-circle"></i> Nouvelle
-                réservation</a>
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2 class="text-primary fw-bold"><i class="bi bi-calendar-check-fill me-2"></i>Gestion des Réservations</h2>
+            <a th:href="@{/reservations/new}" class="btn btn-primary-custom shadow-sm">
+                <i class="bi bi-plus-circle me-2"></i>Nouvelle réservation
+            </a>
         </div>
 
-        <table class="table table-striped table-hover">
-            <thead class="table-dark">
-                <tr>
-                    <th>ID</th>
-                    <th>Client</th>
-                    <th>Voiture</th>
-                    <th>Date Début</th>
-                    <th>Date Fin</th>
-                    <th>Statut</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr th:each="reservation : ${reservations}">
-                    <td th:text="${reservation.id}"></td>
-                    <td th:text="${reservation.client.prenom + ' ' + reservation.client.nom}"></td>
-                    <td
-                        th:text="${reservation.voiture.marque + ' ' + reservation.voiture.modele + ' (' + reservation.voiture.immatriculation + ')'}">
-                    </td>
-                    <td th:text="${reservation.dateDebut}"></td>
-                    <td th:text="${reservation.dateFin}"></td>
-                    <td>
-                        <form th:action="@{/reservations/update-status/{id}(id=${reservation.id})}" method="post">
-                            <select name="statut" class="form-select form-select-sm" onchange="this.form.submit()"
-                                th:classappend="${reservation.statut.name() == 'CONFIRMEE' ? 'bg-success text-white' : 
-                                              (reservation.statut.name() == 'EN_ATTENTE' ? 'bg-warning text-dark' : 
-                                              (reservation.statut.name() == 'TERMINEE' ? 'bg-info text-white' : 'bg-danger text-white'))}">
-                                <option th:each="s : ${statuts}" th:value="${s}" th:text="${s}"
-                                    th:selected="${s == reservation.statut}"></option>
-                            </select>
-                        </form>
-                    </td>
-                    <td>
-                        <a th:href="@{/reservations/{id}(id=${reservation.id})}" class="btn btn-sm btn-info"
-                            title="Détails"><i class="bi bi-eye"></i></a>
-                        <a th:href="@{/reservations/edit/{id}(id=${reservation.id})}" class="btn btn-sm btn-warning"
-                            title="Modifier"><i class="bi bi-pencil"></i></a>
-                        <a th:href="@{/reservations/cancel/{id}(id=${reservation.id})}" class="btn btn-sm btn-danger"
-                            onclick="return confirm('Annuler cette réservation ?')" title="Annuler"
-                            th:if="${reservation.statut.name() != 'ANNULEE'}"><i class="bi bi-x-circle"></i></a>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
+        <div class="card shadow-custom border-0 rounded-custom overflow-hidden">
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle mb-0">
+                        <thead class="bg-light text-secondary">
+                            <tr>
+                                <th class="ps-4 py-3">Référence</th>
+                                <th class="py-3">Client</th>
+                                <th class="py-3">Voiture</th>
+                                <th class="py-3">Période</th>
+                                <th class="py-3">Statut</th>
+                                <th class="text-end pe-4 py-3">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="reservation : ${reservations}" class="border-bottom">
+                                <td class="ps-4 py-3 fw-bold text-secondary" th:text="'#' + ${reservation.id}"></td>
+                                <td class="py-3">
+                                    <div class="d-flex align-items-center">
+                                        <div class="avatar-circle me-3 bg-secondary bg-opacity-10 text-secondary d-flex align-items-center justify-content-center"
+                                            style="width: 35px; height: 35px; border-radius: 50%;">
+                                            <i class="bi bi-person"></i>
+                                        </div>
+                                        <span
+                                            th:text="${reservation.client.prenom + ' ' + reservation.client.nom}"></span>
+                                    </div>
+                                </td>
+                                <td class="py-3">
+                                    <span class="fw-bold"
+                                        th:text="${reservation.voiture.marque + ' ' + reservation.voiture.modele}"></span>
+                                    <br>
+                                    <small class="text-muted" th:text="${reservation.voiture.immatriculation}"></small>
+                                </td>
+                                <td class="py-3">
+                                    <div class="d-flex flex-column small">
+                                        <span><i class="bi bi-arrow-right-circle me-1 text-success"></i><span
+                                                th:text="${reservation.dateDebut}"></span></span>
+                                        <span><i class="bi bi-arrow-left-circle me-1 text-danger"></i><span
+                                                th:text="${reservation.dateFin}"></span></span>
+                                    </div>
+                                </td>
+                                <td class="py-3">
+                                    <form th:action="@{/reservations/update-status/{id}(id=${reservation.id})}"
+                                        method="post">
+                                        <select name="statut" class="form-select form-select-sm border-0 shadow-sm"
+                                            style="width: auto; font-weight: 500;" onchange="this.form.submit()"
+                                            th:classappend="${reservation.statut.name() == 'CONFIRMEE' ? 'bg-success bg-opacity-10 text-success' : 
+                                                          (reservation.statut.name() == 'EN_ATTENTE' ? 'bg-warning bg-opacity-10 text-warning' : 
+                                                          (reservation.statut.name() == 'TERMINEE' ? 'bg-info bg-opacity-10 text-info' : 'bg-danger bg-opacity-10 text-danger'))}">
+                                            <option th:each="s : ${statuts}" th:value="${s}" th:text="${s}"
+                                                th:selected="${s == reservation.statut}"></option>
+                                        </select>
+                                    </form>
+                                </td>
+                                <td class="text-end pe-4">
+                                    <div class="btn-group">
+                                        <a th:href="@{/reservations/{id}(id=${reservation.id})}"
+                                            class="btn btn-sm btn-outline-primary border-0" title="Détails"><i
+                                                class="bi bi-eye-fill"></i></a>
+                                        <a th:href="@{/reservations/edit/{id}(id=${reservation.id})}"
+                                            class="btn btn-sm btn-outline-warning border-0" title="Modifier"><i
+                                                class="bi bi-pencil-fill"></i></a>
+                                        <a th:href="@{/reservations/cancel/{id}(id=${reservation.id})}"
+                                            class="btn btn-sm btn-outline-danger border-0"
+                                            onclick="return confirm('Annuler cette réservation ?')" title="Annuler"
+                                            th:if="${reservation.statut.name() != 'ANNULEE'}"><i
+                                                class="bi bi-x-circle-fill"></i></a>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
     </div>
 </body>
 

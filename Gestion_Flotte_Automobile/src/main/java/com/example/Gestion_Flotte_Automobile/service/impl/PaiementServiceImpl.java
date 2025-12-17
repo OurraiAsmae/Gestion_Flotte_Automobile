@@ -65,6 +65,22 @@ public class PaiementServiceImpl implements PaiementService {
     @Transactional
     public Paiement update(Long id, Paiement paiement) {
         return paiementRepository.findById(id).map(existingPaiement -> {
+            // Check strict strict locking if changing to PAYE
+            if (paiement.getStatut() == StatutPaiement.PAYE && existingPaiement.getStatut() != StatutPaiement.PAYE) {
+                // Changing to PAYE. Check conditions.
+                if (existingPaiement
+                        .getTypePaiement() != com.example.Gestion_Flotte_Automobile.enums.TypePaiement.ESPECES) {
+                    // Must be GERANT
+                    org.springframework.security.core.Authentication auth = org.springframework.security.core.context.SecurityContextHolder
+                            .getContext().getAuthentication();
+                    boolean isGerant = auth.getAuthorities().stream()
+                            .anyMatch(a -> a.getAuthority().equals("ROLE_GERANT"));
+                    if (!isGerant) {
+                        throw new IllegalStateException(
+                                "Seul un Gérant peut valider un paiement non-espèces (Virement/Chèque/Carte).");
+                    }
+                }
+            }
             // Only allow updating the status
             existingPaiement.setStatut(paiement.getStatut());
             return paiementRepository.save(existingPaiement);
@@ -100,5 +116,10 @@ public class PaiementServiceImpl implements PaiementService {
     @Override
     public List<Paiement> findByStatut(StatutPaiement statut) {
         return paiementRepository.findByStatut(statut);
+    }
+
+    @Override
+    public List<Paiement> findByEmploye(Long employeId) {
+        return paiementRepository.findByReservationEmployeId(employeId);
     }
 }

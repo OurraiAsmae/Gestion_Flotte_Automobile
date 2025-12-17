@@ -42,11 +42,13 @@ public class EntretienServiceImpl implements EntretienService {
         voitureService.mettreAJourStatutVoiture(voiture,
                 com.example.Gestion_Flotte_Automobile.enums.StatutVoiture.EN_ENTRETIEN);
 
-        // Notify Managers
-        notificationService.envoyerNotificationAuxGerants(
-                "Nouvel Entretien",
-                "Un nouvel entretien a été planifié pour la voiture " + voiture.getImmatriculation()
-                        + ". Statut: EN_ENTRETIEN");
+        // Notify Managers AND Employees
+        String titre = "Nouvel Entretien";
+        String message = "Un nouvel entretien a été planifié pour la voiture " + voiture.getImmatriculation()
+                + ". Statut: EN_ENTRETIEN";
+
+        notificationService.envoyerNotificationAuxGerants(titre, message);
+        notificationService.envoyerNotificationAuxEmployes(titre, message);
 
         return saved;
     }
@@ -91,9 +93,17 @@ public class EntretienServiceImpl implements EntretienService {
             voitureService.mettreAJourStatutVoiture(entretien.getVoiture(),
                     com.example.Gestion_Flotte_Automobile.enums.StatutVoiture.DISPONIBLE);
 
-            notificationService.envoyerNotificationAuxGerants("Entretien Terminé",
-                    "L'entretien pour la voiture " + entretien.getVoiture().getImmatriculation()
-                            + " est terminé. La voiture est maintenant disponible.");
+            String titre = "Entretien Terminé";
+            String message = "L'entretien pour la voiture " + entretien.getVoiture().getImmatriculation()
+                    + " est terminé. La voiture est maintenant disponible.";
+
+            notificationService.envoyerNotificationAuxGerants(titre, message);
+            notificationService.envoyerNotificationAuxEmployes(titre, message);
         }
+    }
+
+    @Override
+    public List<Entretien> findByDateEntretienBetween(java.time.LocalDate startDate, java.time.LocalDate endDate) {
+        return entretienRepository.findByDateEntretienBetween(startDate, endDate);
     }
 }

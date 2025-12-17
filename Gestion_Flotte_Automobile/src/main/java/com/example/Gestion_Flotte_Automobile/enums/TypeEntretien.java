@@ -5,5 +5,7 @@ public enum TypeEntretien {
     REPARATION,
     VISITE_TECHNIQUE,
     PNEUMATIQUE,
+    ASSURANCE,
+    VIGNETTE,
     AUTRE
 }

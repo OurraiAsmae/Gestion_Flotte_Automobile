@@ -64,7 +64,7 @@
                     <div class="card-body">
                         <div class="d-flex justify-content-between align-items-center">
                             <div>
-                                <h6 class="text-uppercase mb-1 opacity-75">Entretiens</h6>
+                                <h6 class="text-uppercase mb-1 opacity-75">Entretiens & Assurance</h6>
                                 <h2 class="display-6 fw-bold mb-0" th:text="${entretiensEnAttente}">0</h2>
                             </div>
                             <i class="bi bi-tools fs-1 opacity-50"></i>
@@ -94,6 +94,47 @@
                         <a href="/paiements" class="text-white text-decoration-none small stretched-link">
                             Détails <i class="bi bi-chevron-right ms-1"></i>
                         </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section Suivi Financier -->
+        <h4 class="mb-3 text-secondary">Suivi Financier</h4>
+        <div class="row g-4 mb-4">
+            <div class="col-md-6">
+                <div class="card border-0 shadow-sm border-start border-4 border-danger h-100">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center justify-content-between">
+                            <div>
+                                <h6 class="text-secondary text-uppercase mb-1">Dépenses Totales (Entretiens & Assurance)
+                                </h6>
+                                <h3 class="display-6 fw-bold text-danger mb-0" th:text="${totalEntretienPaye} + ' DH'">0
+                                    DH</h3>
+                                <small class="text-muted">Cumul des entretiens et charges payés</small>
+                            </div>
+                            <div class="bg-danger bg-opacity-10 p-3 rounded-circle">
+                                <i class="bi bi-graph-down-arrow text-danger fs-3"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <!-- Placeholder for future financial stats or year comparison -->
+                <div class="card border-0 shadow-sm border-start border-4 border-success h-100">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center justify-content-between">
+                            <div>
+                                <h6 class="text-secondary text-uppercase mb-1">Bénéfice Net (Global)</h6>
+                                <h3 class="display-6 fw-bold text-success mb-0" th:text="${beneficeNet} + ' DH'">0 DH
+                                </h3>
+                                <small class="text-muted">Total Recettes - Total Dépenses</small>
+                            </div>
+                            <div class="bg-success bg-opacity-10 p-3 rounded-circle">
+                                <i class="bi bi-graph-up-arrow text-success fs-3"></i>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

@@ -28,4 +28,6 @@ public interface ReservationService {
     boolean estVoitureDisponible(Long voitureId, java.time.LocalDateTime debut, java.time.LocalDateTime fin);
 
     void annulerReservation(Long id);
+
+    List<Reservation> findByDateDebutBetween(java.time.LocalDateTime start, java.time.LocalDateTime end);
 }

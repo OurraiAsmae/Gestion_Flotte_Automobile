@@ -14,12 +14,16 @@ import java.util.Optional;
 public class VoitureServiceImpl implements VoitureService {
 
     private final VoitureRepository voitureRepository;
+
     private final com.example.Gestion_Flotte_Automobile.repository.EntretienRepository entretienRepository;
+    private final com.example.Gestion_Flotte_Automobile.repository.ReservationRepository reservationRepository;
 
     public VoitureServiceImpl(VoitureRepository voitureRepository,
-            com.example.Gestion_Flotte_Automobile.repository.EntretienRepository entretienRepository) {
+            com.example.Gestion_Flotte_Automobile.repository.EntretienRepository entretienRepository,
+            com.example.Gestion_Flotte_Automobile.repository.ReservationRepository reservationRepository) {
         this.voitureRepository = voitureRepository;
         this.entretienRepository = entretienRepository;
+        this.reservationRepository = reservationRepository;
     }
 
     @Override
@@ -133,6 +137,19 @@ public class VoitureServiceImpl implements VoitureService {
     @Override
     @Transactional
     public void mettreAJourStatutVoiture(Voiture voiture, StatutVoiture statut) {
+        if (statut == StatutVoiture.DISPONIBLE && voiture.getStatut() != StatutVoiture.DISPONIBLE) {
+            // Check if there is an active reservation
+            // Note: We use the repository directly to avoid circular dependency with
+            // ReservationService
+            java.util.Optional<com.example.Gestion_Flotte_Automobile.entity.Reservation> activeRes = reservationRepository
+                    .findByVoitureIdAndStatut(voiture.getId(),
+                            com.example.Gestion_Flotte_Automobile.enums.StatutReservation.CONFIRMEE);
+            if (activeRes.isPresent()) {
+                com.example.Gestion_Flotte_Automobile.entity.Reservation res = activeRes.get();
+                res.setStatut(com.example.Gestion_Flotte_Automobile.enums.StatutReservation.TERMINEE);
+                reservationRepository.save(res);
+            }
+        }
         voiture.setStatut(statut);
         voitureRepository.saveAndFlush(voiture);
     }

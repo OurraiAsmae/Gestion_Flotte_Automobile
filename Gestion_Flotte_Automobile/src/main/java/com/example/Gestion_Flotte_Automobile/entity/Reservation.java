@@ -58,4 +58,7 @@ public class Reservation {
     protected void onCreate() {
         this.dateCreation = LocalDateTime.now();
     }
+
+    @Transient
+    private com.example.Gestion_Flotte_Automobile.enums.TypePaiement typePaiement;
 }

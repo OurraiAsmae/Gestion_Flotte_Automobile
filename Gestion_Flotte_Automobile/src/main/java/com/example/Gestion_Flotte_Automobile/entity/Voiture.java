@@ -55,6 +55,9 @@ public class Voiture {
     @org.springframework.format.annotation.DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate dateProchaineVidange;
 
+    @Column(name = "prix_par_jour")
+    private Double prixParJour;
+
     @Transient
     private Double coutVidange = 0.0;
 

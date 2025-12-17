@@ -3,36 +3,70 @@
 
 <body th:remove="tag">
     <div th:fragment="content">
-        <div class="d-flex justify-content-between align-items-center mb-3">
-            <h2>Gestion des Entretiens</h2>
-            <a th:href="@{/entretiens/new}" class="btn btn-primary"><i class="bi bi-plus-circle"></i> Ajouter un
-                entretien</a>
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2 class="text-primary fw-bold"><i class="bi bi-tools me-2"></i>Gestion des Entretiens</h2>
+            <a th:href="@{/entretiens/new}" class="btn btn-primary-custom shadow-sm">
+                <i class="bi bi-plus-circle me-2"></i>Ajouter un entretien
+            </a>
         </div>
 
-        <table class="table table-striped table-hover">
-            <thead class="table-dark">
-                <tr>
-                    <th>ID</th>
-                    <th>Voiture</th>
-                    <th>Type</th>
-                    <th>Date</th>
-                    <th>Prestataire</th>
-                    <th>Coût</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr th:each="entretien : ${entretiens}">
-                    <td th:text="${entretien.id}"></td>
-                    <td
-                        th:text="${entretien.voiture.marque + ' ' + entretien.voiture.modele + ' (' + entretien.voiture.immatriculation + ')'}">
-                    </td>
-                    <td th:text="${entretien.typeEntretien}"></td>
-                    <td th:text="${entretien.dateEntretien}"></td>
-                    <td th:text="${entretien.prestataire}"></td>
-                    <td th:text="${entretien.cout + ' MAD'}"></td>
-                </tr>
-            </tbody>
-        </table>
+        <div class="card shadow-custom border-0 rounded-custom overflow-hidden">
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle mb-0">
+                        <thead class="bg-light text-secondary">
+                            <tr>
+                                <th class="ps-4 py-3">Voiture</th>
+                                <th class="py-3">Type</th>
+                                <th class="py-3">Date</th>
+                                <th class="py-3">Prestataire</th>
+                                <th class="py-3">Coût</th>
+                                <th class="text-end pe-4 py-3">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="entretien : ${entretiens}" class="border-bottom">
+                                <td class="ps-4 py-3">
+                                    <div class="d-flex align-items-center">
+                                        <div class="avatar-circle me-3 bg-warning bg-opacity-10 text-warning d-flex align-items-center justify-content-center"
+                                            style="width: 40px; height: 40px; border-radius: 50%;">
+                                            <i class="bi bi-wrench"></i>
+                                        </div>
+                                        <div>
+                                            <div class="fw-bold text-dark"
+                                                th:text="${entretien.voiture.marque + ' ' + entretien.voiture.modele}">
+                                            </div>
+                                            <div class="small text-muted"
+                                                th:text="${entretien.voiture.immatriculation}"></div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="py-3"><span class="badge bg-light text-dark border"
+                                        th:text="${entretien.typeEntretien}"></span></td>
+                                <td class="py-3" th:text="${entretien.dateEntretien}"></td>
+                                <td class="py-3" th:text="${entretien.prestataire}"></td>
+                                <td class="py-3 fw-bold text-danger" th:text="${entretien.cout + ' MAD'}"></td>
+                                <td class="text-end pe-4">
+                                    <div class="btn-group">
+                                        <a th:href="@{/entretiens/edit/{id}(id=${entretien.id})}"
+                                            class="btn btn-sm btn-outline-warning border-0" title="Modifier">
+                                            <i class="bi bi-pencil-fill"></i>
+                                        </a>
+                                        <a th:href="@{/entretiens/delete/{id}(id=${entretien.id})}"
+                                            class="btn btn-sm btn-outline-danger border-0"
+                                            sec:authorize="hasRole('GERANT')"
+                                            onclick="return confirm('Êtes-vous sûr de vouloir supprimer cet entretien ?')"
+                                            title="Supprimer">
+                                            <i class="bi bi-trash-fill"></i>
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
     </div>
 </body>
 

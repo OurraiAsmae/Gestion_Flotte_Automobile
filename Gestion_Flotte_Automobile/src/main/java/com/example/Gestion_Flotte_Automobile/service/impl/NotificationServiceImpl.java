@@ -43,6 +43,17 @@ public class NotificationServiceImpl implements NotificationService {
 
     @Override
     @Transactional
+    public void envoyerNotificationAuxEmployes(String titre, String message) {
+        List<com.example.Gestion_Flotte_Automobile.entity.User> employes = userRepository
+                .findByRole(com.example.Gestion_Flotte_Automobile.enums.Role.EMPLOYE);
+        for (com.example.Gestion_Flotte_Automobile.entity.User employe : employes) {
+            envoyerNotification(employe, titre, message,
+                    com.example.Gestion_Flotte_Automobile.enums.TypeNotification.INFORMATION);
+        }
+    }
+
+    @Override
+    @Transactional
     public void envoyerNotification(com.example.Gestion_Flotte_Automobile.entity.User destinataire, String titre,
             String message, com.example.Gestion_Flotte_Automobile.enums.TypeNotification type) {
         Notification notification = new Notification();
