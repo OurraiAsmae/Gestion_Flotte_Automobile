@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html th:replace="~{layout/layout :: layout(~{::content})}">
+
+<body th:remove="tag">
+    <div th:fragment="content">
+        <h2 class="mb-4">Récapitulatif Financier Annuel</h2>
+
+        <form method="get" class="row g-3 mb-4">
+            <div class="col-auto">
+                <label for="year" class="visually-hidden">Année</label>
+                <input type="number" class="form-control" id="year" name="year" th:value="${year}" placeholder="Année">
+            </div>
+            <div class="col-auto">
+                <button type="submit" class="btn btn-primary mb-3">Filtrer</button>
+            </div>
+        </form>
+
+        <div class="row">
+            <div class="col-md-4">
+                <div class="card text-white bg-success mb-3">
+                    <div class="card-header">Chiffre d'Affaires (Réservations)</div>
+                    <div class="card-body">
+                        <h5 class="card-title" th:text="${totalRevenue} + ' MAD'"></h5>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card text-white bg-danger mb-3">
+                    <div class="card-header">Coûts de Maintenance</div>
+                    <div class="card-body">
+                        <h5 class="card-title" th:text="${totalMaintenance} + ' MAD'"></h5>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card text-white bg-primary mb-3">
+                    <div class="card-header">Résultat Net</div>
+                    <div class="card-body">
+                        <h5 class="card-title" th:text="${netIncome} + ' MAD'"></h5>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="mt-4">
+            <!-- Placeholder for detailed table or chart -->
+            <!-- <canvas id="financialChart"></canvas> -->
+            <button onclick="window.print()" class="btn btn-secondary"><i class="bi bi-printer"></i> Imprimer</button>
+            <a th:href="@{/gerant/financial-summary/export(year=${year})}" class="btn btn-success"><i
+                    class="bi bi-file-earmark-spreadsheet"></i> Exporter CSV</a>
+        </div>
+    </div>
+</body>
+
+</html>

@@ -31,8 +31,6 @@ public class VoitureServiceImpl implements VoitureService {
     public Voiture save(Voiture voiture) {
         Voiture saved = voitureRepository.save(voiture);
 
-        // Auto-create maintenance for new cars if dates are set
-        // Use the transient cost if provided, otherwise default to 0.0
         Double coutVidange = voiture.getCoutVidange() != null ? voiture.getCoutVidange() : 0.0;
         Double coutVisite = voiture.getCoutVisiteTechnique() != null ? voiture.getCoutVisiteTechnique() : 0.0;
 
@@ -50,7 +48,6 @@ public class VoitureServiceImpl implements VoitureService {
     @Transactional
     public Voiture update(Long id, Voiture voiture) {
         if (voitureRepository.existsById(id)) {
-            // Fetch existing car to compare dates
             Optional<Voiture> existingOpt = voitureRepository.findById(id);
             if (existingOpt.isPresent()) {
                 Voiture existing = existingOpt.get();
@@ -58,7 +55,6 @@ public class VoitureServiceImpl implements VoitureService {
                 Double coutVidange = voiture.getCoutVidange() != null ? voiture.getCoutVidange() : 0.0;
                 Double coutVisite = voiture.getCoutVisiteTechnique() != null ? voiture.getCoutVisiteTechnique() : 0.0;
 
-                // Check for Vidange date change
                 if (voiture.getDateProchaineVidange() != null &&
                         !voiture.getDateProchaineVidange().equals(existing.getDateProchaineVidange())) {
                     createAutoEntretien(voiture, voiture.getDateProchaineVidange(),
@@ -66,7 +62,6 @@ public class VoitureServiceImpl implements VoitureService {
                             "Vidange planifiée automatiquement via mise à jour voiture.", coutVidange);
                 }
 
-                // Check for Visite Technique date change
                 if (voiture.getDateProchaineVisiteTechnique() != null &&
                         !voiture.getDateProchaineVisiteTechnique().equals(existing.getDateProchaineVisiteTechnique())) {
                     createAutoEntretien(voiture, voiture.getDateProchaineVisiteTechnique(),
@@ -77,16 +72,6 @@ public class VoitureServiceImpl implements VoitureService {
 
             voiture.setId(id);
             Voiture saved = voitureRepository.save(voiture);
-
-            // Re-run the checks to save Entretien using the SAVED voiture to avoid
-            // transient instance errors
-            // (Note: The robust way is to rely on 'createAutoEntretien' which should handle
-            // the entity relationship.
-            // In the 'save' block above, we used 'saved'. In this 'update' block, we pass
-            // 'voiture' but it has the ID.
-            // For safety, let's trust the logic above or rely on simpler flow.
-            // The previous double-check block was a bit redundant if we trust 'voiture' has
-            // ID.)
 
             return saved;
         }
@@ -138,9 +123,6 @@ public class VoitureServiceImpl implements VoitureService {
     @Transactional
     public void mettreAJourStatutVoiture(Voiture voiture, StatutVoiture statut) {
         if (statut == StatutVoiture.DISPONIBLE && voiture.getStatut() != StatutVoiture.DISPONIBLE) {
-            // Check if there is an active reservation
-            // Note: We use the repository directly to avoid circular dependency with
-            // ReservationService
             java.util.Optional<com.example.Gestion_Flotte_Automobile.entity.Reservation> activeRes = reservationRepository
                     .findByVoitureIdAndStatut(voiture.getId(),
                             com.example.Gestion_Flotte_Automobile.enums.StatutReservation.CONFIRMEE);

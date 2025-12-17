@@ -1,0 +1,82 @@
+:root {
+    --primary-color: #0d6efd;
+    --secondary-color: #6c757d;
+    --success-color: #198754;
+    --info-color: #0dcaf0;
+    --warning-color: #ffc107;
+    --danger-color: #dc3545;
+    --light-color: #f8f9fa;
+    --dark-color: #212529;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f4f6f9;
+}
+
+.card {
+    box-shadow: 0 0.125rem 0.25rem rgba(50, 45, 45, 0.075);
+    border: none;
+    margin-bottom: 1.5rem;
+}
+
+.card-header {
+    background-color: #fff;
+    border-bottom: 1px solid rgba(30, 23, 23, 0.125);
+    font-weight: 600;
+}
+
+.btn-primary {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+}
+
+.navbar {
+    box-shadow: 0 4px 6px rgba(0, 0, 0, .1);
+}
+
+/* Add more custom styles here */
+
+/* Override gray text to black */
+.text-muted {
+    color: #000000 !important;
+}
+
+.text-secondary {
+    color: #212529 !important;
+    /* Dark color instead of gray */
+}
+
+small,
+.small {
+    color: #000000 !important;
+}
+
+h6.opacity-75 {
+    opacity: 1 !important;
+    color: #000000 !important;
+}
+
+.card-subtitle {
+    color: #000000 !important;
+}
+
+/* Navbar Customization */
+.navbar-custom {
+    background-color: #234161 !important;
+    /* Dark Slate Blue */
+    padding-top: 1rem !important;
+    padding-bottom: 1rem !important;
+    position: sticky;
+    top: 0;
+    z-index: 1020;
+}
+
+.navbar-custom .navbar-brand,
+.navbar-custom .nav-link {
+    color: #ffffff !important;
+}
+
+.navbar-custom .nav-link:hover {
+    color: var(--primary-color) !important;
+}

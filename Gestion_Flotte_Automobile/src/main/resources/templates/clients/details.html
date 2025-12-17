@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html th:replace="~{layout/layout :: layout(~{::content})}" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<body th:remove="tag">
+    <div th:fragment="content">
+        <div class="card mb-4">
+            <div class="card-header">
+                <h3>Détails du Client</h3>
+            </div>
+            <div class="card-body">
+                <dl class="row">
+                    <dt class="col-sm-3">Nom</dt>
+                    <dd class="col-sm-9" th:text="${client.nom}"></dd>
+
+                    <dt class="col-sm-3">Prénom</dt>
+                    <dd class="col-sm-9" th:text="${client.prenom}"></dd>
+
+                    <dt class="col-sm-3">CIN</dt>
+                    <dd class="col-sm-9" th:text="${client.cin}"></dd>
+
+                    <dt class="col-sm-3">Téléphone</dt>
+                    <dd class="col-sm-9" th:text="${client.telephone}"></dd>
+
+                    <dt class="col-sm-3">Email</dt>
+                    <dd class="col-sm-9" th:text="${client.email}"></dd>
+                </dl>
+                <div class="mt-3">
+                    <a th:href="@{/clients}" class="btn btn-secondary">Retour à la liste</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section Réservations (GERANT seulement) -->
+        <div class="card mb-4" sec:authorize="hasRole('GERANT')">
+            <div class="card-header">
+                <h4>Historique des Réservations</h4>
+            </div>
+            <div class="card-body">
+                <div th:if="${#lists.isEmpty(reservations)}">
+                    <p class="text-muted">Aucune réservation trouvée pour ce client.</p>
+                </div>
+                <table class="table table-striped" th:unless="${#lists.isEmpty(reservations)}">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Voiture</th>
+                            <th>Date Début</th>
+                            <th>Date Fin</th>
+                            <th>Statut</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="reservation : ${reservations}">
+                            <td th:text="${reservation.id}"></td>
+                            <td
+                                th:text="${reservation.voiture.immatriculation} + ' - ' + ${reservation.voiture.marque}">
+                            </td>
+                            <td th:text="${#temporals.format(reservation.dateDebut, 'dd/MM/yyyy HH:mm')}"></td>
+                            <td th:text="${#temporals.format(reservation.dateFin, 'dd/MM/yyyy HH:mm')}"></td>
+                            <td>
+                                <span th:text="${reservation.statut}" class="badge"
+                                    th:classappend="${reservation.statut.name() == 'CONFIRMEE' ? 'bg-success' : 
+                                                      (reservation.statut.name() == 'EN_ATTENTE' ? 'bg-warning' : 
+                                                      (reservation.statut.name() == 'TERMINEE' ? 'bg-primary' : 'bg-danger'))}">
+                                </span>
+                            </td>
+                            <td>
+                                <a th:href="@{/reservations/details/{id}(id=${reservation.id})}"
+                                    class="btn btn-sm btn-info" title="Détails"><i class="bi bi-eye"></i></a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Section Paiements (GERANT seulement) -->
+        <div class="card mb-4" sec:authorize="hasRole('GERANT')">
+            <div class="card-header">
+                <h4>Historique des Paiements</h4>
+            </div>
+            <div class="card-body">
+                <div th:if="${#lists.isEmpty(paiements)}">
+                    <p class="text-muted">Aucun paiement trouvé pour ce client.</p>
+                </div>
+                <table class="table table-striped" th:unless="${#lists.isEmpty(paiements)}">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Réservation ID</th>
+                            <th>Montant</th>
+                            <th>Date Paiement</th>
+                            <th>Type</th>
+                            <th>Statut</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="paiement : ${paiements}">
+                            <td th:text="${paiement.id}"></td>
+                            <td th:text="${paiement.reservation.id}"></td>
+                            <td th:text="${paiement.montant} + ' MAD'"></td>
+                            <td th:text="${#temporals.format(paiement.datePaiement, 'dd/MM/yyyy')}"></td>
+                            <td th:text="${paiement.typePaiement}"></td>
+                            <td>
+                                <span th:text="${paiement.statut}" class="badge"
+                                    th:classappend="${paiement.statut.name() == 'PAYE' ? 'bg-success' : 
+                                                      (paiement.statut.name() == 'EN_ATTENTE' ? 'bg-warning' : 'bg-danger')}">
+                                </span>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

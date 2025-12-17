@@ -109,27 +109,6 @@ public class ReservationServiceImpl implements ReservationService {
                             "Modification interdite : La réservation est payée. Veuillez contacter un gérant.");
                 }
             }
-            // Wait, FindByVoitureId is too broad. We need FindByReservationId.
-            // Paiement entity has "reservation" field. But Repository doesn't have
-            // findByReservationId?
-            // Existing repo has: findByClientId, findByVoitureId, findByStatut.
-            // Missing findByReservationId!
-            // I should use findByVoitureId and filter or assume I can get it.
-            // Actually, I can navigate via Reservation entity if bidirectional?
-            // Reservation entity does NOT have list of paiements.
-            // I should modify PaiementRepository to add findByReservationId or use what I
-            // have.
-            // I have `paiementRepository` but need `findByReservationId`.
-            // I will Assume I can add it or since I cannot modify schema easily, I can add
-            // it to Repo interface in next step?
-            // "Paiement.reservation" exists.
-
-            // For now, to proceed without breaking compilation, I'll Skip strict checking
-            // OR find another way.
-            // I can iterate all payments of the client? No.
-            // Let's Assume, I will add `findByReservationId` to PaiementRepo in a moment.
-
-            // Check if status is becoming TERMINEE or ANNULEE
             if (reservation.getStatut() == StatutReservation.TERMINEE
                     || reservation.getStatut() == StatutReservation.ANNULEE) {
                 // Fetch the actual car to ensure we have the entity
