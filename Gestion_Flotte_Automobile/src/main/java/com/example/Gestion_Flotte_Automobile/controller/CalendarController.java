@@ -68,7 +68,7 @@ public class CalendarController {
 
             if (res.getEmploye() != null && res.getEmploye().getEmail().equals(currentUserEmail)) {
                 events.add(new CalendarEventDTO(
-                        "Ma Réservation - " + res.getVoiture().getImmatriculation()
+                        "Réservation - " + res.getVoiture().getImmatriculation()
                                 + (isTerminee ? " (Terminée)" : ""),
                         res.getDateDebut().toString(),
                         res.getDateFin().toString(),
@@ -99,7 +99,7 @@ public class CalendarController {
                         v.getDateProchaineVidange().toString(),
                         v.getDateProchaineVidange().toString(),
                         "orange",
-                        true, // All day event for dates
+                        true, // All day event for dates²
                         "MAINTENANCE",
                         "Vidange prévue pour: " + carInfo));
             }

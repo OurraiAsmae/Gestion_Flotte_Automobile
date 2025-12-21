@@ -47,7 +47,7 @@ public class Client {
     private String adresse;
 
     @Column(columnDefinition = "TEXT")
-    private String documents; // Pour stocker des liens ou noms de fichiers
+    private String documents;
 
     @OneToMany(mappedBy = "client", cascade = CascadeType.ALL)
     @com.fasterxml.jackson.annotation.JsonIgnore
