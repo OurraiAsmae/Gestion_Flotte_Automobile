@@ -47,6 +47,9 @@ public class VoitureController {
     public String showEditForm(@PathVariable Long id, Model model) {
         Optional<Voiture> voiture = voitureService.findById(id);
         if (voiture.isPresent()) {
+            System.out.println("DEBUG LOAD VOITURE " + id + ": " + voiture.get());
+            System.out.println("DEBUG LOAD COUTS: Vidange=" + voiture.get().getCoutVidange());
+
             model.addAttribute("voiture", voiture.get());
             model.addAttribute("statuts", StatutVoiture.values());
             return "voitures/form";
@@ -58,6 +61,13 @@ public class VoitureController {
     public String updateVoiture(@PathVariable Long id,
             @jakarta.validation.Valid @ModelAttribute("voiture") Voiture voiture,
             org.springframework.validation.BindingResult result, Model model) {
+
+        System.out.println("DEBUG UPDATE VOITURE: " + voiture);
+        System.out.println("DEBUG COUTS: Vidange=" + voiture.getCoutVidange()
+                + ", Visite=" + voiture.getCoutVisiteTechnique()
+                + ", Assurance=" + voiture.getCoutAssurance()
+                + ", Vignette=" + voiture.getCoutVignette());
+
         if (result.hasErrors()) {
             model.addAttribute("statuts", StatutVoiture.values());
             return "voitures/form";

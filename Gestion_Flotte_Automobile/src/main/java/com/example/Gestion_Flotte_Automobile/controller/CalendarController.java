@@ -1,17 +1,21 @@
 package com.example.Gestion_Flotte_Automobile.controller;
 
 import com.example.Gestion_Flotte_Automobile.dto.CalendarEventDTO;
+
 import com.example.Gestion_Flotte_Automobile.entity.Reservation;
 import com.example.Gestion_Flotte_Automobile.entity.User;
 import com.example.Gestion_Flotte_Automobile.entity.Voiture;
+
 import com.example.Gestion_Flotte_Automobile.repository.ReservationRepository;
 import com.example.Gestion_Flotte_Automobile.repository.UserRepository;
 import com.example.Gestion_Flotte_Automobile.repository.VoitureRepository;
+
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+
+import org.springframework.stereotype.Controller;
 
 import java.security.Principal;
 import java.time.format.DateTimeFormatter;
@@ -38,7 +42,7 @@ public class CalendarController {
 
     @GetMapping
     public String showCalendar() {
-        return "calendar"; // Returns calendar.html template
+        return "calendar";
     }
 
     @GetMapping("/events")

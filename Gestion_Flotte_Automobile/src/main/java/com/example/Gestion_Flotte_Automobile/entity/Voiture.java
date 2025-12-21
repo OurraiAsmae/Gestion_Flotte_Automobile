@@ -58,14 +58,20 @@ public class Voiture {
     @Column(name = "prix_par_jour")
     private Double prixParJour;
 
-    @Transient
+    @Column(name = "cout_vidange")
     private Double coutVidange = 0.0;
 
     @org.springframework.format.annotation.DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate dateProchaineVisiteTechnique;
 
-    @Transient
+    @Column(name = "cout_visite_technique")
     private Double coutVisiteTechnique = 0.0;
+
+    @Column(name = "cout_assurance")
+    private Double coutAssurance = 0.0;
+
+    @Column(name = "cout_vignette")
+    private Double coutVignette = 0.0;
 
     @jakarta.validation.constraints.NotNull(message = "La date d'expiration d'assurance est obligatoire")
     @org.springframework.format.annotation.DateTimeFormat(pattern = "yyyy-MM-dd")

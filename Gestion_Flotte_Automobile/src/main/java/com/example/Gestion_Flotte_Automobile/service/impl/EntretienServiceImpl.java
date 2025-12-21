@@ -6,6 +6,7 @@ import com.example.Gestion_Flotte_Automobile.service.EntretienService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -36,6 +37,45 @@ public class EntretienServiceImpl implements EntretienService {
             throw new IllegalStateException(
                     "Impossible d'ajouter un entretien : la voiture est actuellement réservée.");
         }
+
+        // Automatic Renewal Logic
+        LocalDate today = LocalDate.now();
+        switch (entretien.getTypeEntretien()) {
+            case ASSURANCE:
+                // Add 1 year to current expiration, or from today if null/past
+                LocalDate nextAssurance = (voiture.getDateExpirationAssurance() != null
+                        && voiture.getDateExpirationAssurance().isAfter(today))
+                                ? voiture.getDateExpirationAssurance().plusYears(1)
+                                : today.plusYears(1);
+                voiture.setDateExpirationAssurance(nextAssurance);
+                break;
+            case VIGNETTE:
+                LocalDate nextVignette = (voiture.getDateExpirationVignette() != null
+                        && voiture.getDateExpirationVignette().isAfter(today))
+                                ? voiture.getDateExpirationVignette().plusYears(1)
+                                : today.plusYears(1);
+                voiture.setDateExpirationVignette(nextVignette);
+                break;
+            case VISITE_TECHNIQUE:
+                LocalDate nextVisite = (voiture.getDateProchaineVisiteTechnique() != null
+                        && voiture.getDateProchaineVisiteTechnique().isAfter(today))
+                                ? voiture.getDateProchaineVisiteTechnique().plusYears(5)
+                                : today.plusYears(5);
+                voiture.setDateProchaineVisiteTechnique(nextVisite);
+                break;
+            case VIDANGE:
+                // Standard Vidange: maybe add 10000km? (Optional, staying simple as requested)
+                break;
+            default:
+                break;
+        }
+        // Voiture update is handled by JPA dirty checking or explicit save below if
+        // cascade is not set,
+        // but 'voitureService.mettreAJourStatutVoiture' saves it.
+        // Wait, 'mettreAJourStatutVoiture' only updates status. I need to ensure date
+        // is saved.
+        // I will use voitureService.save(voiture) explicitly if needed, but
+        // 'mettreAJourStatutVoiture' calls 'saveAndFlush'.
 
         Entretien saved = entretienRepository.save(entretien);
 

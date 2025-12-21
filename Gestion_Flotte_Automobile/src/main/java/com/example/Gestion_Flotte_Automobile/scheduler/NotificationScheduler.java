@@ -37,8 +37,7 @@ public class NotificationScheduler {
                 for (Voiture voiture : voitures) {
                         // Insurance Check
                         if (voiture.getDateExpirationAssurance() != null &&
-                                        !voiture.getDateExpirationAssurance().isAfter(warningDate) &&
-                                        voiture.getDateExpirationAssurance().isAfter(today.minusDays(1))) {
+                                        !voiture.getDateExpirationAssurance().isAfter(warningDate)) {
                                 String titre = "Rappel Assurance: " + voiture.getImmatriculation();
                                 String msg = "L'assurance de la voiture " + voiture.getImmatriculation() + " expire le "
                                                 + voiture.getDateExpirationAssurance();
@@ -50,8 +49,7 @@ public class NotificationScheduler {
 
                         // Vignette Check
                         if (voiture.getDateExpirationVignette() != null &&
-                                        !voiture.getDateExpirationVignette().isAfter(warningDate) &&
-                                        voiture.getDateExpirationVignette().isAfter(today.minusDays(1))) {
+                                        !voiture.getDateExpirationVignette().isAfter(warningDate)) {
                                 String titre = "Rappel Vignette: " + voiture.getImmatriculation();
                                 String msg = "La vignette de la voiture " + voiture.getImmatriculation() + " expire le "
                                                 + voiture.getDateExpirationVignette();
@@ -62,8 +60,7 @@ public class NotificationScheduler {
 
                         // Maintenance Check (Vidange)
                         if (voiture.getDateProchaineVidange() != null &&
-                                        !voiture.getDateProchaineVidange().isAfter(warningDate) &&
-                                        voiture.getDateProchaineVidange().isAfter(today.minusDays(1))) {
+                                        !voiture.getDateProchaineVidange().isAfter(warningDate)) {
                                 String titre = "Rappel Vidange: " + voiture.getImmatriculation();
                                 String msg = "Vidange à prévoir pour " + voiture.getImmatriculation() + " avant le "
                                                 + voiture.getDateProchaineVidange();
@@ -74,8 +71,7 @@ public class NotificationScheduler {
 
                         // Maintenance Check (Visite Technique)
                         if (voiture.getDateProchaineVisiteTechnique() != null &&
-                                        !voiture.getDateProchaineVisiteTechnique().isAfter(warningDate) &&
-                                        voiture.getDateProchaineVisiteTechnique().isAfter(today.minusDays(1))) {
+                                        !voiture.getDateProchaineVisiteTechnique().isAfter(warningDate)) {
                                 String titre = "Rappel Visite Technique: " + voiture.getImmatriculation();
                                 String msg = "Visite technique à prévoir pour " + voiture.getImmatriculation()
                                                 + " avant le "

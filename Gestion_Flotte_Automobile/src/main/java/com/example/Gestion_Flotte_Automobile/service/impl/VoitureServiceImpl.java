@@ -33,6 +33,8 @@ public class VoitureServiceImpl implements VoitureService {
 
         Double coutVidange = voiture.getCoutVidange() != null ? voiture.getCoutVidange() : 0.0;
         Double coutVisite = voiture.getCoutVisiteTechnique() != null ? voiture.getCoutVisiteTechnique() : 0.0;
+        Double coutAssurance = voiture.getCoutAssurance() != null ? voiture.getCoutAssurance() : 0.0;
+        Double coutVignette = voiture.getCoutVignette() != null ? voiture.getCoutVignette() : 0.0;
 
         createAutoEntretien(saved, saved.getDateProchaineVidange(),
                 com.example.Gestion_Flotte_Automobile.enums.TypeEntretien.VIDANGE,
@@ -40,6 +42,12 @@ public class VoitureServiceImpl implements VoitureService {
         createAutoEntretien(saved, saved.getDateProchaineVisiteTechnique(),
                 com.example.Gestion_Flotte_Automobile.enums.TypeEntretien.VISITE_TECHNIQUE,
                 "Visite Technique planifiée lors de la création.", coutVisite);
+        createAutoEntretien(saved, saved.getDateExpirationAssurance(),
+                com.example.Gestion_Flotte_Automobile.enums.TypeEntretien.ASSURANCE,
+                "Assurance enregistrée lors de la création.", coutAssurance);
+        createAutoEntretien(saved, saved.getDateExpirationVignette(),
+                com.example.Gestion_Flotte_Automobile.enums.TypeEntretien.VIGNETTE,
+                "Vignette enregistrée lors de la création.", coutVignette);
 
         return saved;
     }
@@ -52,30 +60,73 @@ public class VoitureServiceImpl implements VoitureService {
             if (existingOpt.isPresent()) {
                 Voiture existing = existingOpt.get();
 
-                Double coutVidange = voiture.getCoutVidange() != null ? voiture.getCoutVidange() : 0.0;
-                Double coutVisite = voiture.getCoutVisiteTechnique() != null ? voiture.getCoutVisiteTechnique() : 0.0;
+                // Detect changes and create history if needed
+                createHistoryIfChanged(existing, voiture);
 
-                if (voiture.getDateProchaineVidange() != null &&
-                        !voiture.getDateProchaineVidange().equals(existing.getDateProchaineVidange())) {
-                    createAutoEntretien(voiture, voiture.getDateProchaineVidange(),
-                            com.example.Gestion_Flotte_Automobile.enums.TypeEntretien.VIDANGE,
-                            "Vidange planifiée automatiquement via mise à jour voiture.", coutVidange);
-                }
+                // Update fields
+                existing.setImmatriculation(voiture.getImmatriculation());
+                existing.setMarque(voiture.getMarque());
+                existing.setModele(voiture.getModele());
+                existing.setAnnee(voiture.getAnnee());
+                existing.setKilometrageActuel(voiture.getKilometrageActuel());
+                existing.setDateMiseEnService(voiture.getDateMiseEnService());
+                existing.setStatut(voiture.getStatut());
+                existing.setPrixParJour(voiture.getPrixParJour());
 
-                if (voiture.getDateProchaineVisiteTechnique() != null &&
-                        !voiture.getDateProchaineVisiteTechnique().equals(existing.getDateProchaineVisiteTechnique())) {
-                    createAutoEntretien(voiture, voiture.getDateProchaineVisiteTechnique(),
-                            com.example.Gestion_Flotte_Automobile.enums.TypeEntretien.VISITE_TECHNIQUE,
-                            "Visite Technique planifiée automatiquement via mise à jour voiture.", coutVisite);
-                }
+                // Update dates
+                existing.setDateProchaineVidange(voiture.getDateProchaineVidange());
+                existing.setDateProchaineVisiteTechnique(voiture.getDateProchaineVisiteTechnique());
+                existing.setDateExpirationAssurance(voiture.getDateExpirationAssurance());
+                existing.setDateExpirationVignette(voiture.getDateExpirationVignette());
+
+                // Update costs (Fixed: Ensure costs are updated)
+                existing.setCoutVidange(voiture.getCoutVidange());
+                existing.setCoutVisiteTechnique(voiture.getCoutVisiteTechnique());
+                existing.setCoutAssurance(voiture.getCoutAssurance());
+                existing.setCoutVignette(voiture.getCoutVignette());
+
+                System.out.println("DEBUG SERVICE SAVING: " + existing);
+                System.out.println("DEBUG SERVICE SAVING COUTS: Vidange=" + existing.getCoutVidange());
+
+                return voitureRepository.save(existing);
             }
-
-            voiture.setId(id);
-            Voiture saved = voitureRepository.save(voiture);
-
-            return saved;
         }
         return null;
+    }
+
+    private void createHistoryIfChanged(Voiture existing, Voiture newVoiture) {
+        Double coutVidange = newVoiture.getCoutVidange() != null ? newVoiture.getCoutVidange() : 0.0;
+        Double coutVisite = newVoiture.getCoutVisiteTechnique() != null ? newVoiture.getCoutVisiteTechnique() : 0.0;
+        Double coutAssurance = newVoiture.getCoutAssurance() != null ? newVoiture.getCoutAssurance() : 0.0;
+        Double coutVignette = newVoiture.getCoutVignette() != null ? newVoiture.getCoutVignette() : 0.0;
+
+        if (newVoiture.getDateProchaineVidange() != null &&
+                !newVoiture.getDateProchaineVidange().equals(existing.getDateProchaineVidange())) {
+            createAutoEntretien(existing, newVoiture.getDateProchaineVidange(),
+                    com.example.Gestion_Flotte_Automobile.enums.TypeEntretien.VIDANGE,
+                    "Vidange planifiée automatiquement via mise à jour voiture.", coutVidange);
+        }
+
+        if (newVoiture.getDateProchaineVisiteTechnique() != null &&
+                !newVoiture.getDateProchaineVisiteTechnique().equals(existing.getDateProchaineVisiteTechnique())) {
+            createAutoEntretien(existing, newVoiture.getDateProchaineVisiteTechnique(),
+                    com.example.Gestion_Flotte_Automobile.enums.TypeEntretien.VISITE_TECHNIQUE,
+                    "Visite Technique planifiée automatiquement via mise à jour voiture.", coutVisite);
+        }
+
+        if (newVoiture.getDateExpirationAssurance() != null &&
+                !newVoiture.getDateExpirationAssurance().equals(existing.getDateExpirationAssurance())) {
+            createAutoEntretien(existing, newVoiture.getDateExpirationAssurance(),
+                    com.example.Gestion_Flotte_Automobile.enums.TypeEntretien.ASSURANCE,
+                    "Assurance mise à jour via formulaire voiture.", coutAssurance);
+        }
+
+        if (newVoiture.getDateExpirationVignette() != null &&
+                !newVoiture.getDateExpirationVignette().equals(existing.getDateExpirationVignette())) {
+            createAutoEntretien(existing, newVoiture.getDateExpirationVignette(),
+                    com.example.Gestion_Flotte_Automobile.enums.TypeEntretien.VIGNETTE,
+                    "Vignette mise à jour via formulaire voiture.", coutVignette);
+        }
     }
 
     private void createAutoEntretien(Voiture voiture, java.time.LocalDate date,

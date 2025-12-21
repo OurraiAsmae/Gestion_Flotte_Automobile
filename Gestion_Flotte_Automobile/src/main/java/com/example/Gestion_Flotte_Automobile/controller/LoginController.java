@@ -11,6 +11,11 @@ public class LoginController {
         return "login";
     }
 
+    @GetMapping("/")
+    public String root() {
+        return "redirect:/login";
+    }
+
     @GetMapping("/access-denied")
     public String accessDenied() {
         return "access-denied";

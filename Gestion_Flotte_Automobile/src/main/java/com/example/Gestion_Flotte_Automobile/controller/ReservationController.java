@@ -91,23 +91,6 @@ public class ReservationController {
         if (reservation.isPresent()) {
             model.addAttribute("reservation", reservation.get());
             model.addAttribute("clients", clientService.findAll());
-            // For edit, we might want to include the current car even if not available, OR
-            // all cars?
-            // Usually for edit, we show all cars or just the current one + available ones.
-            // For simplicity and user request "not show non-available", let's show
-            // available.
-            // BUT if the current reservation's car is EN_RESERVATION (which it is), it
-            // won't show up!
-            // This is a common bug.
-            // Let's stick to simple "available" for now as per request for "add", but for
-            // "edit" we ideally need "Available + Current".
-            // However, the user specifically mentioned "lorsque j'ai essai d'ajouter".
-            // I will implement "Available" for New. For Edit, I'll keep "All" or better
-            // "Available + Current".
-            // Given the prompt "lorsaue j'ai essai d'ajouter", I will focus on the ADD case
-            // validation primarily.
-            // But to avoid breaking Edit, I'll use ALL for edit for now, or careful logic.
-            // Safer to use All for edit to ensure the current car is visible.
             model.addAttribute("voitures", voitureService.findAll());
             model.addAttribute("employes", userService.findAll());
             model.addAttribute("statuts", StatutReservation.values());
