@@ -25,12 +25,13 @@ public class EntretienController {
 
     @GetMapping("/new")
     public String showCreateForm(@RequestParam(required = false) Long voitureId, Model model) {
-        model.addAttribute("entretien", new Entretien());
+        Entretien entretien = new Entretien();
+        if (voitureId != null) {
+            voitureService.findById(voitureId).ifPresent(entretien::setVoiture);
+        }
+        model.addAttribute("entretien", entretien);
         model.addAttribute("voitures", voitureService.findAll());
         model.addAttribute("types", TypeEntretien.values());
-        if (voitureId != null) {
-            model.addAttribute("selectedVoitureId", voitureId);
-        }
         return "entretiens/form";
     }
 

@@ -23,8 +23,7 @@
                                 th:disabled="${entretien.id != null and not #authorization.expression('hasRole(''GERANT'')')}">
                                 <option value="">-- Sélectionner une voiture --</option>
                                 <option th:each="v : ${voitures}" th:value="${v.id}"
-                                    th:text="${v.marque + ' ' + v.modele + ' (' + v.immatriculation + ')'}"
-                                    th:selected="${v.id == selectedVoitureId}"></option>
+                                    th:text="${v.marque + ' ' + v.modele + ' (' + v.immatriculation + ')'}"></option>
                             </select>
                         </div>
                         <div class="col-md-6 mb-3">
