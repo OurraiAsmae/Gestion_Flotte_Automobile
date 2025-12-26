@@ -35,12 +35,8 @@ public class PasswordResetService {
             return false;
         }
 
-        // Clean up old tokens
         tokenRepository.deleteByUser(user);
         tokenRepository.flush();
-
-        // Generate 6-digit code
-        // String token = UUID.randomUUID().toString();
         String token = String.format("%06d", new java.util.Random().nextInt(1000000));
         PasswordResetToken myToken = new PasswordResetToken(token, user);
         tokenRepository.save(myToken);
@@ -64,7 +60,7 @@ public class PasswordResetService {
             return "expired";
         }
 
-        return null; // Valid
+        return null;
     }
 
     public User getUserByToken(String token) {

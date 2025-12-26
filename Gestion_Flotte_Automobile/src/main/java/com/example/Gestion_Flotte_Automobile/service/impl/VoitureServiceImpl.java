@@ -60,10 +60,8 @@ public class VoitureServiceImpl implements VoitureService {
             if (existingOpt.isPresent()) {
                 Voiture existing = existingOpt.get();
 
-                // Detect changes and create history if needed
                 createHistoryIfChanged(existing, voiture);
 
-                // Update fields
                 existing.setImmatriculation(voiture.getImmatriculation());
                 existing.setMarque(voiture.getMarque());
                 existing.setModele(voiture.getModele());
@@ -73,13 +71,11 @@ public class VoitureServiceImpl implements VoitureService {
                 existing.setStatut(voiture.getStatut());
                 existing.setPrixParJour(voiture.getPrixParJour());
 
-                // Update dates
                 existing.setDateProchaineVidange(voiture.getDateProchaineVidange());
                 existing.setDateProchaineVisiteTechnique(voiture.getDateProchaineVisiteTechnique());
                 existing.setDateExpirationAssurance(voiture.getDateExpirationAssurance());
                 existing.setDateExpirationVignette(voiture.getDateExpirationVignette());
 
-                // Update costs (Fixed: Ensure costs are updated)
                 existing.setCoutVidange(voiture.getCoutVidange());
                 existing.setCoutVisiteTechnique(voiture.getCoutVisiteTechnique());
                 existing.setCoutAssurance(voiture.getCoutAssurance());

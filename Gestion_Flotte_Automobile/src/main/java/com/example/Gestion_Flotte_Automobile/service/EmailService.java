@@ -25,14 +25,11 @@ public class EmailService {
     private String fromEmail;
 
     public void sendEmail(String to, String subject, String body) {
-        // Convert newlines to HTML breaks for legacy text compatibility
         String htmlBody = body.replace("\n", "<br>");
         sendHtmlEmail(to, subject, htmlBody, null, null);
     }
 
     public void sendHtmlEmail(String to, String subject, String bodyContent, String actionLink, String actionText) {
-        // Log to console used to be here, keeping it for info but integrating HTML
-        // logic
         System.out.println("----- EMAIL SENDING -----");
         System.out.println("To: " + to);
         System.out.println("Subject: " + subject);
@@ -44,14 +41,11 @@ public class EmailService {
 
             Context context = new Context();
             context.setVariable("subject", subject);
-            context.setVariable("bodyContent", bodyContent); // Pass raw string or formatted HTML if body is HTML
+            context.setVariable("bodyContent", bodyContent);
             context.setVariable("actionLink", actionLink);
             context.setVariable("actionText", actionText);
 
             String html = templateEngine.process("email/default-email", context);
-
-            // Console preview of the HTML (optional, helpful for debugging without SMTP)
-            // System.out.println("HTML Content Preview:\n" + html);
 
             helper.setTo(to);
             helper.setFrom(fromEmail);

@@ -64,25 +64,16 @@ public class EntretienServiceImpl implements EntretienService {
                 voiture.setDateProchaineVisiteTechnique(nextVisite);
                 break;
             case VIDANGE:
-                // Standard Vidange: maybe add 10000km? (Optional, staying simple as requested)
                 break;
             default:
                 break;
         }
-        // Voiture update is handled by JPA dirty checking or explicit save below if
-        // cascade is not set,
-        // but 'voitureService.mettreAJourStatutVoiture' saves it.
-        // Wait, 'mettreAJourStatutVoiture' only updates status. I need to ensure date
-        // is saved.
-        // I will use voitureService.save(voiture) explicitly if needed, but
-        // 'mettreAJourStatutVoiture' calls 'saveAndFlush'.
 
         Entretien saved = entretienRepository.save(entretien);
 
         voitureService.mettreAJourStatutVoiture(voiture,
                 com.example.Gestion_Flotte_Automobile.enums.StatutVoiture.EN_ENTRETIEN);
 
-        // Notify Managers AND Employees
         String titre = "Nouvel Entretien";
         String message = "Un nouvel entretien a été planifié pour la voiture " + voiture.getImmatriculation()
                 + ". Statut: EN_ENTRETIEN";

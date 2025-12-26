@@ -30,7 +30,6 @@ public class PaiementServiceImpl implements PaiementService {
             throw new IllegalArgumentException("Le paiement doit être lié à une réservation existante.");
         }
 
-        // Auto-fill client and car from reservation if not set or verify match
         if (paiement.getClient() == null) {
             paiement.setClient(paiement.getReservation().getClient());
         }
@@ -44,8 +43,6 @@ public class PaiementServiceImpl implements PaiementService {
 
         Paiement saved = paiementRepository.save(paiement);
 
-        // Notify the client? Or the employee who manages this?
-        // Let's notify the employee responsible for the reservation.
         if (saved.getReservation().getEmploye() != null) {
             notificationService.envoyerNotification(saved.getReservation().getEmploye(),
                     "Nouveau Paiement",
@@ -65,12 +62,10 @@ public class PaiementServiceImpl implements PaiementService {
     @Transactional
     public Paiement update(Long id, Paiement paiement) {
         return paiementRepository.findById(id).map(existingPaiement -> {
-            // Check strict strict locking if changing to PAYE
             if (paiement.getStatut() == StatutPaiement.PAYE && existingPaiement.getStatut() != StatutPaiement.PAYE) {
-                // Changing to PAYE. Check conditions.
                 if (existingPaiement
                         .getTypePaiement() != com.example.Gestion_Flotte_Automobile.enums.TypePaiement.ESPECES) {
-                    // Must be GERANT
+
                     org.springframework.security.core.Authentication auth = org.springframework.security.core.context.SecurityContextHolder
                             .getContext().getAuthentication();
                     boolean isGerant = auth.getAuthorities().stream()
@@ -81,7 +76,6 @@ public class PaiementServiceImpl implements PaiementService {
                     }
                 }
             }
-            // Only allow updating the status
             existingPaiement.setStatut(paiement.getStatut());
             return paiementRepository.save(existingPaiement);
         }).orElse(null);

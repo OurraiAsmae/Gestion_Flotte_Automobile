@@ -11,8 +11,8 @@ public class CalendarEventDTO {
     private String title;
     private String start;
     private String end;
-    private String color; // "blue", "red", "orange"
+    private String color;
     private boolean allDay;
-    private String type; // "PERSONAL", "RETURN", "MAINTENANCE"
+    private String type;
     private String description;
 }

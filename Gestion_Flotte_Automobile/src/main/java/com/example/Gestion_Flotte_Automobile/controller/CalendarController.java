@@ -23,10 +23,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Controller
-@RequestMapping("/calendar") // Base path for this controller
+@RequestMapping("/calendar")
 public class CalendarController {
-
-    // Controller for Calendar view and events
 
     @Autowired
     private ReservationRepository reservationRepository;
@@ -99,7 +97,7 @@ public class CalendarController {
                         v.getDateProchaineVidange().toString(),
                         v.getDateProchaineVidange().toString(),
                         "orange",
-                        true, // All day event for dates²
+                        true,
                         "MAINTENANCE",
                         "Vidange prévue pour: " + carInfo));
             }

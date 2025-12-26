@@ -21,10 +21,8 @@ public class DashboardController {
 
     @GetMapping("/gerant/home")
     public String gerantHome(Model model) {
-        // Common stats
         populateCommonStats(model);
 
-        // Gerant specific stats (Financials & Maintenance)
         model.addAttribute("entretiensEnAttente", dashboardService.countEntretiensEnAttente());
         model.addAttribute("paiementsDuMois", dashboardService.sumPaiementsDuMois());
 
@@ -35,7 +33,6 @@ public class DashboardController {
         model.addAttribute("totalEntretienPaye", totalDepenses);
         model.addAttribute("beneficeNet", beneficeNet);
 
-        // Add notifications for Gerant as well since they are generated
         addNotificationsToModel(model);
 
         return "gerant/home";
@@ -43,13 +40,10 @@ public class DashboardController {
 
     @GetMapping("/employe/home")
     public String employeHome(Model model) {
-        // Common stats
         populateCommonStats(model);
 
-        // Employe specific stats (Clients)
         model.addAttribute("clientsCount", dashboardService.countClients());
 
-        // Notifications
         addNotificationsToModel(model);
 
         return "employe/home";

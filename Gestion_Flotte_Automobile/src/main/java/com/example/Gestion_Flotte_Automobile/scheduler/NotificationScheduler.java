@@ -25,7 +25,7 @@ public class NotificationScheduler {
         private final NotificationService notificationService;
         private final NotificationRepository notificationRepository;
 
-        @Scheduled(cron = "0 0 9 * * ?") // Daily at 9 AM
+        @Scheduled(cron = "0 0 9 * * ?")
         public void checkDeadlines() {
                 List<Voiture> voitures = voitureRepository.findAll();
                 List<User> gerants = userRepository.findByRole(Role.GERANT);
@@ -35,19 +35,16 @@ public class NotificationScheduler {
                 LocalDate warningDate = today.plusDays(7);
 
                 for (Voiture voiture : voitures) {
-                        // Insurance Check
                         if (voiture.getDateExpirationAssurance() != null &&
                                         !voiture.getDateExpirationAssurance().isAfter(warningDate)) {
                                 String titre = "Rappel Assurance: " + voiture.getImmatriculation();
                                 String msg = "L'assurance de la voiture " + voiture.getImmatriculation() + " expire le "
                                                 + voiture.getDateExpirationAssurance();
 
-                                // Notify BOTH Gerants and Employes
                                 notifyUsers(gerants, titre, msg, TypeNotification.RAPPEL);
                                 notifyUsers(employes, titre, msg, TypeNotification.RAPPEL);
                         }
 
-                        // Vignette Check
                         if (voiture.getDateExpirationVignette() != null &&
                                         !voiture.getDateExpirationVignette().isAfter(warningDate)) {
                                 String titre = "Rappel Vignette: " + voiture.getImmatriculation();
@@ -58,7 +55,6 @@ public class NotificationScheduler {
                                 notifyUsers(employes, titre, msg, TypeNotification.RAPPEL);
                         }
 
-                        // Maintenance Check (Vidange)
                         if (voiture.getDateProchaineVidange() != null &&
                                         !voiture.getDateProchaineVidange().isAfter(warningDate)) {
                                 String titre = "Rappel Vidange: " + voiture.getImmatriculation();
@@ -69,7 +65,6 @@ public class NotificationScheduler {
                                 notifyUsers(employes, titre, msg, TypeNotification.ALERTE);
                         }
 
-                        // Maintenance Check (Visite Technique)
                         if (voiture.getDateProchaineVisiteTechnique() != null &&
                                         !voiture.getDateProchaineVisiteTechnique().isAfter(warningDate)) {
                                 String titre = "Rappel Visite Technique: " + voiture.getImmatriculation();
@@ -86,8 +81,7 @@ public class NotificationScheduler {
         private void notifyUsers(List<User> users, String titre, String message, TypeNotification type) {
                 LocalDateTime startOfDay = LocalDate.now().atStartOfDay();
                 for (User user : users) {
-                        // Prevent duplicates: Check if notification exists for this user, title, since
-                        // start of today
+
                         boolean exists = notificationRepository.existsByDestinataireIdAndTitreAndDateEnvoiAfter(
                                         user.getId(), titre, startOfDay);
 

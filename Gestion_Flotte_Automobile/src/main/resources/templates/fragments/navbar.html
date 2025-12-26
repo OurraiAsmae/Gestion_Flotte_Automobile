@@ -12,7 +12,6 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav me-auto">
-                <!-- GERANT Menu -->
                 <li class="nav-item" sec:authorize="hasRole('GERANT')">
                     <a class="nav-link" th:href="@{/gerant/home}">
                         <i class="bi bi-speedometer2"></i> Dashboard
@@ -45,7 +44,7 @@
                 </li>
                 <li class="nav-item" sec:authorize="hasRole('GERANT')">
                     <a class="nav-link" th:href="@{/entretiens}">
-                        <i class="bi bi-tools"></i> Entretiens
+                        <i class="bi bi-tools"></i> Maintenances
                     </a>
                 </li>
                 <li class="nav-item" sec:authorize="hasRole('GERANT')">
@@ -64,7 +63,6 @@
                     </a>
                 </li>
 
-                <!-- EMPLOYE Menu -->
                 <li class="nav-item" sec:authorize="hasRole('EMPLOYE')">
                     <a class="nav-link" th:href="@{/employe/home}">
                         <i class="bi bi-speedometer2"></i> Dashboard
@@ -92,7 +90,7 @@
                 </li>
                 <li class="nav-item" sec:authorize="hasRole('EMPLOYE')">
                     <a class="nav-link" th:href="@{/entretiens}">
-                        <i class="bi bi-tools"></i> Entretiens
+                        <i class="bi bi-tools"></i> Maintenances
                     </a>
                 </li>
                 <li class="nav-item" sec:authorize="hasRole('EMPLOYE')">

@@ -51,7 +51,6 @@ public class ProfileController {
         user.setTelephone(telephone);
         userRepository.save(user);
 
-        // Update session details if necessary, but for now just redirect
         redirectAttributes.addFlashAttribute("success", "Profil mis à jour avec succès.");
         return "redirect:/profile";
     }

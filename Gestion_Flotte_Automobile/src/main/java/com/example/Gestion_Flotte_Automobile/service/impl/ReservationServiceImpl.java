@@ -46,7 +46,6 @@ public class ReservationServiceImpl implements ReservationService {
         reservation.setStatut(StatutReservation.CONFIRMEE);
         Reservation saved = reservationRepository.save(reservation);
 
-        // Calculate Price & Create Payment
         Double storedPrice = saved.getVoiture().getPrixParJour();
         double prixParJour = (storedPrice != null) ? storedPrice : 300.0; // Default to 300 if not set
 
@@ -54,7 +53,7 @@ public class ReservationServiceImpl implements ReservationService {
         long days = (long) Math.ceil(hours / 24.0);
 
         if (days < 1)
-            days = 1; // Minimum 1 day
+            days = 1;
         double totalAmount = days * prixParJour;
 
         com.example.Gestion_Flotte_Automobile.entity.Paiement paiement = new com.example.Gestion_Flotte_Automobile.entity.Paiement();
@@ -69,9 +68,7 @@ public class ReservationServiceImpl implements ReservationService {
         paiement.setTypePaiement(
                 selectedType != null ? selectedType : com.example.Gestion_Flotte_Automobile.enums.TypePaiement.ESPECES);
 
-        paiement.setDatePaiement(java.time.LocalDate.now()); // Set current date as placeholder or actual payment date?
-                                                             // Usually 'datePaiement' is when it is paid. But field is
-                                                             // NotNull. So set now.
+        paiement.setDatePaiement(java.time.LocalDate.now());
         paiementRepository.save(paiement);
 
         voitureService.mettreAJourStatutVoiture(saved.getVoiture(),
@@ -93,7 +90,6 @@ public class ReservationServiceImpl implements ReservationService {
     @Transactional
     public Reservation update(Long id, Reservation reservation) {
         if (reservationRepository.existsById(id)) {
-            // Strict Locking Rules
             java.util.List<com.example.Gestion_Flotte_Automobile.entity.Paiement> paiements = paiementRepository
                     .findByReservationId(id);
             boolean isPaid = paiements.stream()
@@ -111,7 +107,6 @@ public class ReservationServiceImpl implements ReservationService {
             }
             if (reservation.getStatut() == StatutReservation.TERMINEE
                     || reservation.getStatut() == StatutReservation.ANNULEE) {
-                // Fetch the actual car to ensure we have the entity
                 Optional<Reservation> existingOpt = reservationRepository.findById(id);
                 if (existingOpt.isPresent()) {
                     com.example.Gestion_Flotte_Automobile.entity.Voiture voiture = existingOpt.get().getVoiture();
@@ -120,8 +115,6 @@ public class ReservationServiceImpl implements ReservationService {
                     voitureService.mettreAJourStatutVoiture(voiture,
                             com.example.Gestion_Flotte_Automobile.enums.StatutVoiture.DISPONIBLE);
 
-                    // Also update the incoming reservation's voiture to avoid overwriting with
-                    // stale state
                     if (reservation.getVoiture() != null) {
                         reservation.getVoiture()
                                 .setStatut(com.example.Gestion_Flotte_Automobile.enums.StatutVoiture.DISPONIBLE);

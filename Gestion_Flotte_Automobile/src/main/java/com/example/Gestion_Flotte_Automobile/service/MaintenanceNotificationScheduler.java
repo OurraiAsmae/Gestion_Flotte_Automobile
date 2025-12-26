@@ -28,7 +28,6 @@ public class MaintenanceNotificationScheduler {
     @Autowired
     private NotificationRepository notificationRepository;
 
-    // Run every day at 9:00 AM
     @Scheduled(cron = "0 0 9 * * ?")
     public void checkMaintenanceSchedule() {
         System.out.println("----- Checking Maintenance Schedules -----");
@@ -49,15 +48,11 @@ public class MaintenanceNotificationScheduler {
 
         long daysUntil = ChronoUnit.DAYS.between(today, scheduledDate);
 
-        // Notify 7 days, 3 days, and 1 day before
         if (daysUntil == 7 || daysUntil == 3 || daysUntil == 1) {
             String message = "Rappel: " + type + " prévue dans " + daysUntil + " jours pour " + voiture.getMarque()
                     + " " + voiture.getModele() + " (" + voiture.getImmatriculation() + ").";
 
             for (User manager : managers) {
-                // Ideally check if notification already exists for today to avoid spam if
-                // script restarts
-                // But simplified logic as per requirements
                 Notification notification = new Notification();
                 notification.setDestinataire(manager);
                 notification.setTitre("Rappel " + type);

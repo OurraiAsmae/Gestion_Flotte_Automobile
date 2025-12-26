@@ -41,12 +41,11 @@
             </div>
             <div class="card-footer">
                 <a th:href="@{/voitures/edit/{id}(id=${voiture.id})}" class="btn btn-warning">Modifier</a>
-                <a th:href="@{/entretiens/new(voitureId=${voiture.id})}" class="btn btn-success ms-2">Ajouter un
-                    entretien</a>
+                <a th:href="@{/entretiens/new(voitureId=${voiture.id})}" class="btn btn-success ms-2">Ajouter une
+                    maintenance</a>
             </div>
         </div>
 
-        <!-- Sections for related data can be added here (Entretiens, Reservations, etc.) -->
         <div class="row">
             <div class="col-md-12">
                 <div class="card">
@@ -56,7 +55,7 @@
                     <div class="card-body">
                         <p><em>Fonctionnalité à implémenter : afficher ici les réservations et entretiens liés.</em></p>
                         <a th:href="@{/entretiens/voiture/{id}(id=${voiture.id})}" class="btn btn-outline-info">Voir les
-                            entretiens</a>
+                            Maintenances</a>
                         <a th:href="@{/paiements/voiture/{id}(id=${voiture.id})}" class="btn btn-outline-success">Voir
                             les paiements</a>
                     </div>

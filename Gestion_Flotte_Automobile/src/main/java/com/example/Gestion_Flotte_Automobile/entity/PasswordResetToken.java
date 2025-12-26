@@ -28,6 +28,6 @@ public class PasswordResetToken {
     public PasswordResetToken(String token, User user) {
         this.token = token;
         this.user = user;
-        this.expiryDate = LocalDateTime.now().plusMinutes(60); // Token valid for 60 minutes
+        this.expiryDate = LocalDateTime.now().plusMinutes(60);
     }
 }

@@ -56,7 +56,7 @@ public class ReservationController {
         model.addAttribute("clients", clientService.findAll());
         model.addAttribute("voitures",
                 voitureService.findByStatut(com.example.Gestion_Flotte_Automobile.enums.StatutVoiture.DISPONIBLE));
-        model.addAttribute("employes", userService.findAll()); // Ideally filter by role EMPLOYE
+        model.addAttribute("employes", userService.findAll());
         model.addAttribute("statuts", StatutReservation.values());
         model.addAttribute("typesPaiement", com.example.Gestion_Flotte_Automobile.enums.TypePaiement.values());
         return "reservations/form";

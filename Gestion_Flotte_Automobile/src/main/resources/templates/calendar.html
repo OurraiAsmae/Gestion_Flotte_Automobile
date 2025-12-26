@@ -3,7 +3,6 @@
 
 <body>
     <div th:fragment="content">
-        <!-- Filters -->
         <div class="row mb-4">
             <div class="col-12">
                 <div class="card shadow-sm mb-3">
@@ -37,14 +36,12 @@
             </div>
         </div>
 
-        <!-- Calendar Container -->
         <div class="card shadow-sm border-0">
             <div class="card-body p-0">
                 <div id='calendar' style="min-height: 800px;"></div>
             </div>
         </div>
 
-        <!-- Event Details Modal -->
         <div class="modal fade" id="eventModal" tabindex="-1" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
@@ -66,7 +63,6 @@
             </div>
         </div>
 
-        <!-- FullCalendar CDN -->
         <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.10/index.global.min.js'></script>
 
         <script>
@@ -89,7 +85,6 @@
                         week: 'Semaine',
                         day: 'Jour'
                     },
-                    // Manually handle events fetching to support filtering
                     events: function (info, successCallback, failureCallback) {
                         fetch('/calendar/events')
                             .then(response => response.json())
@@ -105,12 +100,9 @@
                         meridiem: false
                     },
                     eventClick: function (info) {
-                        // Populate Modal
                         document.getElementById('eventModalLabel').textContent = info.event.title;
                         document.getElementById('eventDate').textContent = info.event.start.toLocaleDateString() +
                             (info.event.end ? ' - ' + info.event.end.toLocaleDateString() : '');
-
-                        // Access extended props
                         document.getElementById('eventType').textContent = info.event.extendedProps.type;
                         document.getElementById('eventDescription').textContent = info.event.extendedProps.description;
 
@@ -119,7 +111,6 @@
                 });
                 calendar.render();
 
-                // Filters Logic
                 function filterEvents(events) {
                     var showPersonal = document.getElementById('filterPersonal').checked;
                     var showReturn = document.getElementById('filterReturn').checked;
@@ -137,11 +128,10 @@
                     });
                 }
 
-                // Add Event Listeners to Checkboxes
                 var checkboxes = document.querySelectorAll('.form-check-input');
                 checkboxes.forEach(function (box) {
                     box.addEventListener('change', function () {
-                        calendar.refetchEvents(); // Re-runs the 'events' function
+                        calendar.refetchEvents();
                     });
                 });
             });

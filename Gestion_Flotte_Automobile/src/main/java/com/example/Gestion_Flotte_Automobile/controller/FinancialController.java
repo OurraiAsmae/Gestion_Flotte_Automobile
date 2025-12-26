@@ -27,26 +27,11 @@ public class FinancialController {
         final int finalYear = year;
         LocalDate startOfYear = LocalDate.of(year, 1, 1);
 
-        // Revenue (Paid payments)
         Double totalRevenue = paiementRepository.sumMontantByStatutAndDatePaiementGreaterThanEqual(StatutPaiement.PAYE,
                 startOfYear);
         if (totalRevenue == null)
             totalRevenue = 0.0;
 
-        // Expenses (Entretiens - assuming cost is summed from entretiens created/done
-        // this year)
-        // EntretienRepository needs a sum method. If not exists, I'll fetch and sum.
-        // Assuming I can't easily change repo schema, I'll Fetch All and stream filter.
-        // Or check if EntretienRepository has custom queries.
-        // Step 1: Just calc locally for simplicity given constraints.
-        // Warning: This loads all records. If large DB, bad. But for "Update", might be
-        // acceptable or I add query.
-        // I'll try to add Query to EntretienRepository in next step if needed, or use
-        // stream.
-        // Let's use stream for now to ensure compile-time safety without touching Repo
-        // if uncertain.
-        // Wait, User said "Providing: Total revenue, Maintenance costs".
-        // I'll add a sum method to EntretienRepository properly.
         Double totalMaintenance = entretienRepository.findAll().stream()
                 .filter(e -> e.getDateEntretien().getYear() == finalYear)
                 .mapToDouble(e -> e.getCout())
@@ -66,7 +51,6 @@ public class FinancialController {
         if (year == null)
             year = LocalDate.now().getYear();
         final int finalYear = year;
-        // LocalDate startOfYear = LocalDate.of(year, 1, 1); // Unused
 
         response.setContentType("text/csv");
         response.setHeader("Content-Disposition", "attachment; filename=\"financial_summary_" + year + ".csv\"");
@@ -74,7 +58,6 @@ public class FinancialController {
         java.io.PrintWriter writer = response.getWriter();
         writer.println("Date,Type,Description,Montant,Status");
 
-        // Payments (Revenue)
         java.util.List<com.example.Gestion_Flotte_Automobile.entity.Paiement> paiements = paiementRepository
                 .findByStatut(StatutPaiement.PAYE);
         for (com.example.Gestion_Flotte_Automobile.entity.Paiement p : paiements) {
@@ -84,7 +67,6 @@ public class FinancialController {
             }
         }
 
-        // Entretiens (Expense)
         java.util.List<com.example.Gestion_Flotte_Automobile.entity.Entretien> entretiens = entretienRepository
                 .findAll();
         for (com.example.Gestion_Flotte_Automobile.entity.Entretien e : entretiens) {

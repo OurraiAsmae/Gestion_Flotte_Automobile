@@ -39,17 +39,14 @@ public class ReportServiceImpl implements ReportService {
             PdfWriter.getInstance(document, out);
             document.open();
 
-            // Font
             com.itextpdf.text.Font fontHeader = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 14, BaseColor.BLACK);
             com.itextpdf.text.Font fontRow = FontFactory.getFont(FontFactory.HELVETICA, 12, BaseColor.BLACK);
 
-            // Title
             Paragraph title = new Paragraph("Rapport des Réservations", fontHeader);
             title.setAlignment(Element.ALIGN_CENTER);
             document.add(title);
             document.add(Chunk.NEWLINE);
 
-            // Table
             PdfPTable table = new PdfPTable(6);
             table.setWidthPercentage(100);
             Stream.of("ID", "Client", "Voiture", "Début", "Fin", "Statut")
@@ -86,7 +83,6 @@ public class ReportServiceImpl implements ReportService {
         try (Workbook workbook = new XSSFWorkbook(); ByteArrayOutputStream out = new ByteArrayOutputStream()) {
             Sheet sheet = workbook.createSheet("Réservations");
 
-            // Header
             Row headerRow = sheet.createRow(0);
             String[] headers = { "ID", "Client", "Voiture", "Début", "Fin", "Statut" };
             for (int i = 0; i < headers.length; i++) {
@@ -99,7 +95,6 @@ public class ReportServiceImpl implements ReportService {
                 cell.setCellStyle(style);
             }
 
-            // Data
             List<Reservation> reservations = reservationRepository.findAll();
             int rowIdx = 1;
             for (Reservation res : reservations) {

@@ -30,7 +30,6 @@
             </div>
         </div>
 
-        <!-- Section Réservations (GERANT seulement) -->
         <div class="card mb-4" sec:authorize="hasRole('GERANT')">
             <div class="card-header">
                 <h4>Historique des Réservations</h4>
@@ -75,7 +74,6 @@
             </div>
         </div>
 
-        <!-- Section Paiements (GERANT seulement) -->
         <div class="card mb-4" sec:authorize="hasRole('GERANT')">
             <div class="card-header">
                 <h4>Historique des Paiements</h4>

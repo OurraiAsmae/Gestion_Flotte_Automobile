@@ -28,8 +28,6 @@ public class NotificationServiceImpl implements NotificationService {
         return notificationRepository.save(notification);
     }
 
-    // ... existing methods ...
-
     @Override
     @Transactional
     public void envoyerNotificationAuxGerants(String titre, String message) {

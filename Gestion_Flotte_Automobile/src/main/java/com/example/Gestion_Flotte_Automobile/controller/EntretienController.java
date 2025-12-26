@@ -70,17 +70,14 @@ public class EntretienController {
                     .anyMatch(a -> a.getAuthority().equals("ROLE_GERANT"));
 
             if (!isGerant) {
-                // For Employees: Only update 'paye' status.
                 java.util.Optional<Entretien> existingOpt = entretienService.findById(id);
                 if (existingOpt.isPresent()) {
                     Entretien existing = existingOpt.get();
                     existing.setPaye(entretien.isPaye());
-                    // Preserve other fields (redundant if using ORM save on attached entity but
-                    // good for safety)
+
                     entretienService.save(existing);
                 }
             } else {
-                // For Gerant: Update all
                 entretienService.update(id, entretien);
             }
             return "redirect:/entretiens";

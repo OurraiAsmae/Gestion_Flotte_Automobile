@@ -15,10 +15,6 @@
                     <div class="row">
                         <div class="col-md-6 mb-3">
                             <label for="voiture" class="form-label">Voiture</label>
-                            <!-- If Disabled, we must provide a hidden input to send the ID, or handle null in controller. 
-                                 However, standard HTML disabled selects don't send value. 
-                                 If we rely on Controller "Fetch and Merge", we don't strictly need the value if we don't use it.
-                                 But for "New", it must be enabled. -->
                             <select class="form-select" id="voiture" th:field="*{voiture}" required
                                 th:disabled="${entretien.id != null and not #authorization.expression('hasRole(''GERANT'')')}">
                                 <option value="">-- Sélectionner une voiture --</option>
@@ -27,7 +23,7 @@
                             </select>
                         </div>
                         <div class="col-md-6 mb-3">
-                            <label for="typeEntretien" class="form-label">Type d'entretien</label>
+                            <label for="typeEntretien" class="form-label">Type de maintenance</label>
                             <select class="form-select" id="typeEntretien" th:field="*{typeEntretien}"
                                 th:disabled="${entretien.id != null and not #authorization.expression('hasRole(''GERANT'')')}">
                                 <option th:each="t : ${types}" th:value="${t}" th:text="${t}"></option>
